@@ -1,0 +1,174 @@
+/*Balwinder Singh CSS*/
+
+.panel-tab {
+    font-size: 15px;
+}
+.panel-tab-double .panel-heading ul li a > div span:last-child{
+    margin-top : 9px;    
+}
+form .form-group .error{
+    display: inline;
+}
+.error{
+    color: #e9573f;
+}
+.padding-0{
+    padding: 0;
+}
+.bootstrap-switch {
+    display: list-item !important;
+}
+.chosen-container-multi .chosen-choices li.search-choice {
+    background: #37BC9B !important;
+    color: #fff !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    padding: 5px 20px 7px 7px !important;
+    font-weight: bold !important;
+    box-shadow: none !important;
+}
+.chosen-container-multi .chosen-choices li.search-choice .search-choice-close{
+    background: rgba(0, 0, 0, 0) url("../images/close1.png") no-repeat scroll 0 0 !important;
+    margin-top: 4px;
+}
+/*.dropzone.dz-started .dz-default.dz-message{
+    display: block !important;
+    opacity: 1 !important;
+}*/
+td.dt-center { text-align: center; }
+.img-bot div {
+    display: inline-block;
+    margin-left: 2px;
+}
+.red {color: #ff0000;}
+.green {color: #81B71A;}
+.shortcuts > ul {
+    padding: 0;
+}
+.shortcuts li {
+    display: inline-flex;
+    height: 150px;
+    list-style: outside none none;
+    margin: 10px;
+    width: 170px;
+    background: #2A2A2A;
+    text-align: center;
+}
+.icon-wrapper {
+    color: #fff;
+    /*// padding: 20px;*/
+    width: 100%;
+}
+.icon-below-left{
+    border-right: 1px solid;
+}
+.icon-below-left, .icon-below-right {
+    float: left;
+    width: 50%;
+}
+.icon-top {
+    padding: 20px;
+}
+.icon-below {
+    border-top: 1px solid;
+    padding: 10px 0;
+}
+.shortcuts li a {
+    color: #fff;
+}
+.shortcuts li a:hover {
+    color: #fff;
+    text-decoration: none;
+}
+.cursor {
+    cursor: pointer;
+}
+#header .navbar-header {
+    background-color: #580000;
+}
+#sidebar-left.sidebar-box .sidebar-menu > li.active > a > .icon i, #sidebar-left.sidebar-rounded .sidebar-menu > li.active > a > .icon i, #sidebar-left.sidebar-circle .sidebar-menu > li.active > a > .icon i{
+    background: #580000;
+}
+.nicescroll-rails div{
+    background: #580000 !important;
+}
+#sidebar-left::after {
+    background: #ffffff;
+}
+.sidebar-menu > li > a:hover .text, .sidebar-menu > li > a:hover .icon > i{
+    color: #000;
+}
+.sidebar-menu > li a{
+    /*border-bottom: 1px solid;*/
+}
+form .form-group .control-label{
+    color: #000;
+}
+.label-info{
+    background-color: #37bc9b !important;
+}
+.pager li > a, .pager li > span{
+    cursor: pointer;
+}
+a {
+    color: #000;
+}
+body.page-sidebar-minimize #header .navbar-minimize > a{
+    background: #580000;
+}
+#sidebar-left .sidebar-menu ul li.active::after{
+    background: #580000;
+}
+#sidebar-left.sidebar-box .sidebar-menu > li > ul > li:hover::after, #sidebar-left.sidebar-rounded .sidebar-menu > li > ul > li:hover::after, #sidebar-left.sidebar-circle .sidebar-menu > li > ul > li:hover::after{
+    box-shadow: 0 0 0 5px #8A3F00;
+}
+#sidebar-left .sidebar-menu ul li:hover::after{
+    background-color: #580000;
+}
+#sidebar-left .sidebar-menu ul li:hover a::before{
+    color: #580000;
+}
+.page-sidebar-minimize .sidebar-menu > li > a > span{
+    color: #fff !important;
+}
+.multiple-images li {
+    border: 1px solid #580000;
+    padding: 5px;
+}
+.img-bot div {
+    border: 1px solid #580000;
+    display: inline-block;
+    margin-top: 6px;
+    padding: 3px 7px;
+    text-align: center;
+}
+.dropzone {
+    min-height: 160px !important;
+}
+.content {
+    background: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 10px #fff;
+    display: none;
+}
+.content h4 {
+    margin: 0;
+}
+/*22 june changes*/
+.lowBtn li + li::before {
+    content: none;
+}
+.lowBtn > a {
+    color: #fff;
+}
+.lowBtn > a:hover {
+    text-decoration: none;
+}
+.replyForm {
+    margin-top: 25px;
+}
+#gritter-notice-wrapper{
+    display: none;
+}
+/*22 june end*/

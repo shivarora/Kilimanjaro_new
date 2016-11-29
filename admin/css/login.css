@@ -1,0 +1,82 @@
+/*html, body{
+    background: rgba(0, 0, 0, 0) url("../images/body-bg.png") repeat scroll 0 0;
+}
+.pageTop {
+    height: 90px;
+    padding-bottom: 10px;
+    text-align: center;
+    width: 100%;
+    margin-top: 75px;
+}
+.pageTop .logo{
+    float: none;
+}
+#page {
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+    margin: auto;
+    max-width: 400px;
+    padding: 20px;
+    width: 100%;
+}
+form{
+    margin-bottom: 0;
+    padding: 0;
+    background: none;
+    border: 0;
+}
+#page .pageContent{
+    padding: 0;
+    background: none;
+}
+
+form fieldset .smallField {
+    border: 1px solid #c8c8c8;
+    max-width: 360px;
+    padding: 10px;
+    width: 100%;
+}
+
+
+form fieldset .mediumField {
+    border: 1px solid #c8c8c8;
+    max-width: 360px;
+    padding: 10px;
+    width: 100%;
+}
+form .button {
+    background: #4E4E4E none repeat scroll 0 0;
+    border: 0 none;
+    color: #fff;
+    font-size: 15px;
+    margin-top: 17px;
+    padding: 5px 0;
+    width: 100%;
+    text-transform: uppercase;
+}
+form fieldset label{
+    font-size: 15px;
+    text-transform: uppercase;
+}
+.retr > a {
+    color: #4e4e4e;
+}
+.retr {
+    margin: 5px 0 0;
+    text-align: center;
+}
+
+
+
+.sign-header {
+    background-color: #940000;
+    border-bottom: 10px solid #580000;
+}
+.btn-theme {
+    background-color: #940000;
+    border-color: #940000;
+    color: white;
+}
+#sign-wrapper a {
+    color: #940000;
+    font-size: 13px;
+}*/
