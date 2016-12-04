@@ -196,37 +196,60 @@ class CsvUtilitymodel extends Commonmodel {
     
     function userUpload( $csvfile ){		
         $iterator = 1;  
-        foreach ($csvfile as $users) {			
+        
+        foreach ($csvfile as $key => $users) {	
+
+		$final_user = [];        		 					 	 				
+
+		 $final_user[] =explode(",", $users['first_name,last_name,username,mobile,email,password,activation_type,creater_id,address,company']);
+		
+
+		 $user['upro_first_name'] 	= $final_user[0][0];
+		 $user['upro_last_name'] 	= $final_user[0][1];
+		 $user['uacc_username'] 	= $final_user[0][2];
+		 $user['upro_phone'] 		= $final_user[0][3];
+		 $user['uacc_email'] 		= $final_user[0][4];
+		 $user['uacc_password'] 	= $final_user[0][5];
+		 $user['activation_type'] 	= $final_user[0][6];
+		 $user['upro_creater_id'] 	= $final_user[0][7];
+		 $user['uadd_recipient'] 	= $final_user[0][8];
+		 $user['upro_company']      = $final_user[0][9];
+
+
 			$return_bool = false;				
 			$instant_active = FALSE;
 			$user_profile_pic = "";
-			$email = $users[ 'uacc_email'];
-			$username = ucfirst( $users[ 'uacc_username' ] );
+			$email = $user[ 'uacc_email'];
+			$username = ucfirst( $user[ 'uacc_username' ] );
+
+
+				 
 			$already_user = $this->flexi_auth->get_user_by_identity($email)->row_array();
+				 
+
 			if( !$already_user ) {
-				$password = $users[ 'uacc_password' ];
-				$activation_type = $users[ 'activation_type' ];
+				$password = $user[ 'uacc_password' ];
+				$activation_type = $user[ 'activation_type' ];
 				if($activation_type == 'direct'){
 					$instant_active = TRUE;
 					$this->flexi_auth->change_config_setting('shoot_email_on_account_create', 0); 
 				}
 				
 				$dept = '';
-				if( isset( $users[ 'urpo_department'] ) && !empty( $users[ 'urpo_department'] )  ){
-					$users[ 'urpo_department'] = explode(",", $users[ 'urpo_department']);
-					$dept = json_encode( $users[ 'urpo_department'] );
+				if( isset( $user[ 'urpo_department'] ) && !empty( $user[ 'urpo_department'] )  ){
+					$user[ 'urpo_department'] = explode(",", $user[ 'urpo_department']);
+					$dept = json_encode( $user[ 'urpo_department'] );
 				}
 				$profile_data = [
 									'upro_pass'	=> $this->encrypt->encode($password).'-'.$password,
-									'upro_image' => $user_profile_pic,
-									'upro_first_name' => ucfirst( strtolower( $users['upro_first_name'] ) ),
-									'upro_last_name' => ucfirst( strtolower($users['upro_last_name'] ) ),
+									'upro_first_name' => ucfirst( strtolower( $user['upro_first_name'] ) ),
+									'upro_last_name' => ucfirst( strtolower($user['upro_last_name'] ) ),
 									'upro_phone' => "",
 									'upro_newsletter' => 0,
 									'upro_creater_id' => $this->flexi_auth->get_user_id(),
-									'uadd_recipient' => ucfirst( $users['uadd_recipient'] ),
+									'uadd_recipient' => ucfirst( $user['uadd_recipient'] ),
 									'uadd_phone' => "",
-									'uadd_company' => "",
+									'upro_company' => $user['upro_company'],
 									'uadd_address_01' => "",
 									'uadd_address_02' => "",
 									'uadd_city' => "",
@@ -235,7 +258,7 @@ class CsvUtilitymodel extends Commonmodel {
 									'uadd_country' => "",
 									'upro_department' => $dept,
 							];
-						$user_group = $users[ 'source_grp' ];					
+						$user_group = $user[ 'source_grp' ];					
 						$new_user_profile = 1;
 						/*
 						if( $user_group == ADMIN){
@@ -250,59 +273,20 @@ class CsvUtilitymodel extends Commonmodel {
 						*/
 						if ($user_group == CMP_ADMIN ){
 							$user_group_id = 1;
-							$company_code = $users[ 'company_code' ];
+							$company_code = $user[ 'company_code' ];
 							$profile_data['uadd_company'] = $company_code;
 							$profile_data['upro_company'] = $company_code;
 						}
+						
 						$check = array( $email, $username, $password, $profile_data, $new_user_profile, $instant_active );					
+						
 						$user_id = $this->flexi_auth->insert_user($email, $username, $password, $profile_data, $new_user_profile, $instant_active);
-						if( $user_group ==  ADMIN ){
-							// Get users current privilege data.
-							$sql_select = array($this->flexi_auth->db_column('user_privilege_users', 'privilege_id'));
-							$sql_where = array($this->flexi_auth->db_column('user_privilege_users', 'user_id') => $this->flexi_auth->get_user_id());
-							$user_privileges = $this->flexi_auth->get_user_privileges_array($sql_select, $sql_where);
-
-							$logged_in_privileges= array_column($user_privileges, $this->flexi_auth->db_column('user_privilege_users', 'privilege_id'));
-							foreach( $logged_in_privileges as $privilege) {
-								$this->flexi_auth->insert_privilege_user($user_id, $privilege);	
-							}
-						}
-						else if ( $user_group ==  CMP_ADMIN ) {
-							
-							if( isset( $users['is_sub_admin'] ) ) {
-								// Get users current privilege data.
-								$sql_select = array($this->flexi_auth->db_column('user_privilege_users', 'privilege_id'));
-								$sql_where = array($this->flexi_auth->db_column('user_privilege_users', 'user_id') => 2);
-								$user_privileges = $this->flexi_auth->get_user_privileges_array($sql_select, $sql_where);
-
-								$logged_in_privileges= array_column($user_privileges, $this->flexi_auth->db_column('user_privilege_users', 'privilege_id'));
-							}else{
-								// Get users group privilege data.
-								$sql_select = array($this->flexi_auth->db_column('user_privilege_groups', 'privilege_id'));
-								$sql_where = array($this->flexi_auth->db_column('user_privilege_groups', 'group_id') => '1');
-								$user_privileges = $this->flexi_auth->get_user_group_privileges_array($sql_select, $sql_where);
-								
-								$logged_in_privileges= array_column($user_privileges, 
-									$this->flexi_auth->db_column('user_privilege_groups', 'privilege_id'));
-							}
-							if( is_array($logged_in_privileges) && $logged_in_privileges) {
-								foreach( $logged_in_privileges as $privilege) {
-									$this->flexi_auth->insert_privilege_user($user_id, $privilege);	
-								}
-							}
-						}			
-						if( $user_id && $users[ 'urpo_department'] 
-							&& !empty( $users[ 'urpo_department'] ) && is_array( $users[ 'urpo_department'] ) ){
-							$opts = [];
-							$opts[ 'user_id' ] = $user_id;
-							$opts[ 'dept_ids' ] = $users[ 'urpo_department'];
-							$this->load->model( 'Commonusermodel' );
-							$this->Commonusermodel->_create_user_product_policy( $opts );
-						}			
+										 		
 
 						if($this->input->post('activation_type', true) == 'direct'){
 							$this->flexi_auth->change_config_setting('shoot_email_on_account_create', 1); 
 						}
+
 						$return_bool = true;
 			} else {
 				$user_id = $already_user[ 'uacc_id' ];
@@ -315,8 +299,15 @@ class CsvUtilitymodel extends Commonmodel {
 											'Password' 	=> $password,											
 											'Status' 	=> $return_bool,
 										];
+
+			
             $iterator++;
         }
+
+        	 echo "<pre>";
+        	 print_r($this->csv_data_report);
+        	 exit();
+
         com_array_to_csv($this->csv_data_report, "users_upload_report.csv");
 	}
 }

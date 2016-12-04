@@ -635,11 +635,16 @@ if (!function_exists('com_getThis')) {
 	 * download == "toto.csv" -> download file toto.csv
 	 */	
 	function com_array_to_csv($data_array,  $download = ""){
+		
+		ini_set('display_errors', '1');
+
 		if ($download != "")
 		{	
 			header('Content-Type: application/csv');
 			header('Content-Disposition: attachement; filename="' . $download . '"');
 		}		
+
+		
 
 		ob_start();
 		$f = fopen('php://output', 'w') or show_error("Can't open php://output");
@@ -655,6 +660,12 @@ if (!function_exists('com_getThis')) {
 		fclose($f) or show_error("Can't close php://output");
 		$str = ob_get_contents();
 		ob_end_clean();
+
+
+
+			 echo "<pre>";
+			 print_r($str);
+			 exit();
 
 		if ($download == "")
 		{

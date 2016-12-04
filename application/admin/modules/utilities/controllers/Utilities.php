@@ -11,10 +11,10 @@ class Utilities extends Admin_Controller {
 	
     function __construct() {
         parent::__construct();
-        if (! $this->flexi_auth->is_privileged('Utilities')){ 
-			$this->utility->show404();
-            return;
-    	}
+   //      if (! $this->flexi_auth->is_privileged('Utilities')){ 
+			// $this->utility->show404();
+   //          return;
+    	//}
         $this->_prod_images = [];
         $this->_prod_images[ ] = [
 								'Image' => "Image",
@@ -43,6 +43,8 @@ class Utilities extends Admin_Controller {
             redirect('dashboard');
         }
         */
+
+
         if (empty($_FILES['csv']['name'])) {
             $this->form_validation->set_rules('file', 'csv', 'trim|required');
         }
@@ -54,6 +56,7 @@ class Utilities extends Admin_Controller {
 			$inner[ 'post_size' ] = ini_get('upload_max_filesize');
             $page['content'] = $this->load->view('user-csv-upload', $inner, TRUE);
             $this->load->view($this->template['default'], $page);
+
         } else {
             $config = array();
             $config['file_name'] = $_FILES['csv']['name'];
@@ -67,8 +70,8 @@ class Utilities extends Admin_Controller {
 				if (!$this->upload->do_upload('csv')) {
 					show_error($this->upload->display_errors('<p class="err">', '</p>'));
 					return FALSE;
-				} else {
-					$upload_data = $this->upload->data();					
+				} else {						
+					$upload_data = $this->upload->data();		
 					$server_file_name = $upload_data['file_name'];
 					$this->load->model('CsvUtilitymodel');
 					if (file_exists($this->config->item('USER_CSV_PATH') . $server_file_name)) {

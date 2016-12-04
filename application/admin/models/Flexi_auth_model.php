@@ -179,7 +179,7 @@ class Flexi_auth_model extends Flexi_auth_lite_model
 		
 		// Main user account table.	
 	    $sql_insert = array(
-			$this->auth->tbl_col_user_account['group_id'] => $group_id,
+			$this->auth->tbl_col_user_account['group_id'] => 4,
 			$this->auth->tbl_col_user_account['email'] => $email,
 			$this->auth->tbl_col_user_account['username'] => ($username) ? $username : '',
 			$this->auth->tbl_col_user_account['password'] => $hash_password,
@@ -395,6 +395,7 @@ class Flexi_auth_model extends Flexi_auth_lite_model
 		if($custom_data['upro_approval_acc'] == ""){
 			$custom_data['upro_approval_acc'] = $custom_data['upro_creater_id'];
 		}
+
 		foreach ($this->auth->database_config['custom'] as $custom_table => $table_data)
 		{
 			$sql_insert = array();
