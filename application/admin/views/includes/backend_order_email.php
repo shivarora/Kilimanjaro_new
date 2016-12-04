@@ -30,7 +30,7 @@
                                     </td>
                                     <td width="40%" style="vertical-align: top"> 
                                         <h3 style="font-weight: 600; margin-bottom: 5px; margin-top: 5px; font-size: 16px;"> 
-                                            KilimanjaroCoffeeCupCompany Workwear Ltd.<br>
+                                            KilimanjaroCoffeeCupCompany Ltd.<br>
                                                 Adams Street,<br>
                                                     New York,<br>
                                                         B7 4LS.<br>
