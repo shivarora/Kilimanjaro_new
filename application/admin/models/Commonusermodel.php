@@ -134,10 +134,12 @@ class CommonuserModel extends Commonmodel {
 	 	}
 
 		//$sql_where[$this->flexi_auth->db_column('user_group', 'name')] = USER;
+
+	 		
 	 	
 	 	if( in_array($user_group,[ CMP_MD, CMP_PM ] ) ) {
-			$company_code = $this->flexi_auth->get_user_custom_data( 'upro_company' );
-			$sql_where['upro_company'] = $company_code;	
+			$company_code = $this->flexi_auth->get_user_custom_data();
+-           $sql_where['upro_company'] = $company_code['upro_company'];
 		}
 	 	/* Company admin */
 	 	else if ( $user_group == CMP_ADMIN ) {
@@ -164,7 +166,67 @@ class CommonuserModel extends Commonmodel {
 		$search_query = FALSE;		
 		$total_users = $this->flexi_auth->search_users_query($search_query, FALSE, FALSE, FALSE, TRUE)->num_rows();				
 		$this->flexi_auth->sql_limit($limit, $offset);
-		$this->data['users'] = $this->flexi_auth->search_users_array($search_query, FALSE, FALSE, FALSE, TRUE);		
+
+		$this->data['users'] = $this->flexi_auth->search_users_array($search_query, FALSE, FALSE, FALSE, TRUE);
+
+
+
+	
+
+		$scout_array = [];
+		if($this->user_type == 'Council'){
+			$scout_array[]= $company_code['uacc_id'];
+            foreach ($this->data['users'] as $key => $value) {
+                // # code...
+                if($value['ugrp_name'] == 'Company'){
+                    unset($this->data['users'][$key]);
+                }elseif($value['ugrp_name'] == 'Council'){
+                    unset($this->data['users'][$key]);
+                }elseif ($value['ugrp_name'] == 'Scout') {
+                	# code...
+                	if($value['upro_creater_id'] != $company_code['uacc_id']){
+                		unset($this->data['users'][$key]);
+                	}else{
+                		//creating scout array , so we will get user under these scouts only
+
+            			$scout_array[] = $value['uacc_id'];
+                	}
+                }                
+            
+            }    
+
+           
+            foreach ($this->data['users'] as $key => $value) {
+            	# code...
+            	if($value['ugrp_name'] == 'Front User'){
+            		if(!in_array($value[upro_creater_id], $scout_array)){
+            			unset($this->data['users'][$key]);
+            			//exit();
+            		}
+            	}
+            }
+        }
+
+
+        if($this->user_type == 'Scout'){
+			foreach ($this->data['users'] as $key => $value) {
+                // # code...
+                if($value['ugrp_name'] == 'Company'){
+                    unset($this->data['users'][$key]);
+                }elseif($value['ugrp_name'] == 'Council'){
+                    unset($this->data['users'][$key]);
+                }elseif($value['ugrp_name'] == 'Scout'){
+                    unset($this->data['users'][$key]);
+                }elseif ($value['ugrp_name'] == 'Front User') {
+                	# code...
+                	if($value['upro_creater_id'] != $company_code['uacc_id']){
+                		unset($this->data['users'][$key]);
+                	}
+                }                
+            
+            }    
+        }
+		
 		//pagination configuration		
 		$config['cur_page'] 		= 	$offset;
 		$config['total_rows'] 		= 	$total_users;

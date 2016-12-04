@@ -387,6 +387,9 @@ class Payments_pro extends Admin_Controller
 
         $PayPalResult = $this->paypal_pro->SetExpressCheckout($PayPalRequestData);
 
+        $pay_url = 'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=' . $PayPalResult['TOKEN'];
+
+          
         if(!$this->paypal_pro->APICallSuccessful($PayPalResult['ACK']))
         {
             $errors = array('Errors'=>$PayPalResult['ERRORS']);
@@ -394,13 +397,19 @@ class Payments_pro extends Admin_Controller
         }
         else
         {
-            // Successful call.  Load view or whatever you need to do here.    
-            if(MCC_PAYPAL_DEMO_MODE == 'TEST') { 
-             $pay_url = 'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=' . $PayPalResult['TOKEN'];
-              }else{
-             // redirect( 'https://www.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=' . $PayPalResult['TOKEN'] );
-           }
 
+        
+            // Successful call.  Load view or whatever you need to do here.    
+           // if(MCC_PAYPAL_DEMO_MODE == 'TEST') { 
+             $pay_url = 'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=' . $PayPalResult['TOKEN'];
+             // }else{
+             // redirect( 'https://www.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=' . $PayPalResult['TOKEN'] );
+           //}
+
+
+                echo "<pre>";
+                print_r($pay_url);
+                exit();
 
         $details = array();
         $details['order_details'] = $orderDetail;
