@@ -8,55 +8,8 @@
                     </head>
 
                     <body bgcolor="#FFFFFF">
-                        <table style="width: 900px;margin:0 auto;">
-                            <thead>
-                                <tr>
-                                    <td width="60%">
-                                        <a title="KilimanjaroCoffeeCup" class="col-md-3" href="http://KilimanjaroCoffeeCupCompany.webnseo.co.uk/">
-                                            <img src="http://KilimanjaroCoffeeCupCompany/imgs/logo.jpg" alt="KilimanjaroCoffeeCupCompany"> 
-                                        </a>
-                                    </td>
-                                    <td align="left" width="40%"><h1 class="collapse" style="font-size: 30px;"> Order Confirmation </h1></td> 
-                                </tr>
-                            </thead>
-                        </table>
-
-                        <table style="width: 900px;margin:0 auto;padding-top:30px;">
-                            <thead>
-                                <tr>
-                                    <td width="60%" style="vertical-align: top"> 
-                                        <h3 style="font-weight: 600; margin-bottom: 5px; margin-top: 5px; font-size: 16px;"> Order #: <?php echo $order_details['order_num'] ?></h3> 
-                                        <h3 style="font-weight: 600; margin-bottom: 5px; margin-top: 5px; font-size: 16px;"> Date : <?php echo date("d M Y",strtotime($order_details['order_time'])); ?> </h3> 
-                                    </td>
-                                    <td width="40%" style="vertical-align: top"> 
-                                        <h3 style="font-weight: 600; margin-bottom: 5px; margin-top: 5px; font-size: 16px;"> 
-                                            KilimanjaroCoffeeCupCompany Ltd.<br>
-                                                Adams Street,<br>
-                                                    New York,<br>
-                                                        B7 4LS.<br>
-                                        </h3> 
-                                        <h3 style="font-weight: 600; margin-bottom: 5px; margin-top: 5px; font-size: 16px;"> 
-                                            VAT : 227036527 <br>
-                                        </h3> 
-                                    </td>
-                                </tr>
-                            </thead>
-                        </table>
                         
-                    
-                        
-                        <table style="width: 900px;margin:0 auto;">
-                            <tbody>
-                                <tr>
-                                    <td width="100%" style="text-align: center;padding-top: 35px">
-                                    Please click the following link to make the payment using paypal:</br>
-                                        <a style="color: rgb(0, 0, 0); text-decoration: none; font-weight: 600; font-size: 16px;" href="#">
-                                             <b><?php echo $paypal_url; ?></b>
-                                        </a>
-                                    </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+<div class=\"tableWrapper\"> \r    <table width=\"100%\" border=\"0\" cellpadding=\"2\" cellspacing=\"0\" class=\"table table-bordered user-management-list-table\">\n<thead>\n<tr>\n<th>User Name<\/th><th>Profile Group<\/th><th>Company<\/th><th>Profession<\/th><th>Approval Manager<\/th><th>Profile<\/th><th>Delete User<\/th><\/tr>\n<\/thead>\n<\/table><\/div>\r<div class=\"clearfix\"><\/div>\r<div class=\"ajax-pagination\" style=\"text-align:center;\">\r    <ul class=\"pagination\">\r        <div class=\"pagination\"><li><a href=\"javascript:void(0);\"\n\t\t\t\t\tonclick=\" $.post('http:\/\/kilimanjaro.com\/admin\/user\/ajax\/user\/index\/', {'form_data':$('#user-search').serialize(),'ci_csrf_token':'','ajax':'1','offset':'0',}, \n\t\t\t\t\tfunction(data){\n\t\t\t\t\t\tdata = JSON.parse(data);\n\t                    if(data.success){\n\t                        $('input[name=\\'ci_csrf_token\\']' ).val(data.csrf_hash);                        \n\t                        $('#user-list-div').html(data.html);\n\t                        $('html, body').animate({ scrollTop: $('#search-prod').offset().top },'fast');\n\t                    }  \n                \t}); return false;\">&lt;<\/a><\/li><li><a href=\"javascript:void(0);\"\n\t\t\t\t\tonclick=\" $.post('http:\/\/kilimanjaro.com\/admin\/user\/ajax\/user\/index\/', {'form_data':$('#user-search').serialize(),'ci_csrf_token':'','ajax':'1','offset':'0',}, \n\t\t\t\t\tfunction(data){\n\t\t\t\t\t\tdata = JSON.parse(data);\n\t                    if(data.success){\n\t                        $('input[name=\\'ci_csrf_token\\']' ).val(data.csrf_hash);                        \n\t                        $('#user-list-div').html(data.html);\n\t                        $('html, body').animate({ scrollTop: $('#search-prod').offset().top },'fast');\n\t                    }  \n             \t}); return false;\">1<\/a><\/li><li class=\"active\"><a><b>2<\/a><\/b><\/li><\/div> \r    <\/ul>\r<\/div>\r"
                         
 
                                                             <!-- End Code Line -->

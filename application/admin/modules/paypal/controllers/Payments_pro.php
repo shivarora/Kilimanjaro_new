@@ -222,7 +222,7 @@ class Payments_pro extends Admin_Controller
         }        
     }
 
-	function Set_express_checkout($order_number)
+	function Set_express_checkout()
     {
 
     	$this->load->model('order/Ordermodel');
@@ -231,7 +231,9 @@ class Payments_pro extends Admin_Controller
         // fecth all orders and run through the paypal and send email.
         $all_Orders = $this->Ordermodel->fetchOrders2();
 
+
         foreach ($all_Orders as $key => $value) {
+
             # code...
 
                     $order_number = $value['id'];
@@ -393,6 +395,9 @@ class Payments_pro extends Admin_Controller
 
                     $pay_url = 'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=' . $PayPalResult['TOKEN'];
 
+                    print_r($pay_url);
+                    exit();
+
                       
                     if(!$this->paypal_pro->APICallSuccessful($PayPalResult['ACK']))
                     {
@@ -426,7 +431,8 @@ class Payments_pro extends Admin_Controller
                         'body' => $emailBody
                     ];
 
-                    $status =  $this->semail->send_mail( $email_config );   
+                    $status =  $this->semail->send_mail( $email_config );
+                    $this->Ordermodel->update_order_email_status($order_number);   
                     unset($details);
             }
         }

@@ -416,6 +416,7 @@ class Cart extends Front_Controller {
     }
 
     function process() {
+
         $this->isLogged = $this->flexi_auth->is_logged_in();
         if (!$this->isLogged && $this->session->userdata('guest_user_id') == null) {
 
@@ -423,14 +424,34 @@ class Cart extends Front_Controller {
             return false;
         }
         
+
         if ($this->cart->total_items() == 0) {
             $this->session->set_flashdata('message', 'No item found in cart .');
             redirect('catalogue');
             return false;
         }
+
+        if ($this->session->userdata('CheckoutAddress') == null) {
+                redirect('customer/shipping_details');
+        }   
+
+        
        if ($this->session->userdata('shipping_charges') == null) {
             
-                redirect('customer/shipping_details');
+            
+
+                 //get shipping price
+            $json_string = file_get_contents("http://localhost:3000/");
+            //json string to array
+            $parsed_arr = json_decode($json_string,true);
+
+            if($parsed_arr['message'] == 'Success'){
+
+                $shipping_charges = $parsed_arr['data']['RateReplyDetails'][0]['RatedShipmentDetails'][0]['ShipmentRateDetail']['TotalNetChargeWithDutiesAndTaxes']['Amount'];
+
+                    $this->session->set_userdata(array('shipping_charges' => $shipping_charges));
+
+            }
             
         }
 

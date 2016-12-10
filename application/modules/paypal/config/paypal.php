@@ -6,7 +6,8 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  * -------------------------
  * TRUE means you'll be hitting PayPal's sandbox/test servers.  FALSE means you'll be hitting the live servers.
  */
-$config['Sandbox'] = (MCC_PAYPAL_DEMO_MODE == 'TEST') ? TRUE : FALSE;
+///$config['Sandbox'] = (MCC_PAYPAL_DEMO_MODE == 'TEST') ? TRUE : FALSE;
+$config['Sandbox'] =  TRUE ;
 
 /* 
  * PayPal API Version
@@ -30,9 +31,9 @@ $config['APIVersion'] = '123.0';
  * Live: https://www.paypal.com/us/cgi-bin/webscr?cmd=_login-api-run
  *
  */
-$config['APIUsername'] = $config['Sandbox'] ? 'anita.singh2112_api1.gmail.com' : MCC_PAYPAL_API_USERNAME;
-$config['APIPassword'] = $config['Sandbox'] ? 'M7FY5PCTDRRSTENV' : MCC_PAYPAL_API_PASSWORD;
-$config['APISignature'] = $config['Sandbox'] ? 'AFcWxV21C7fd0v3bYYYRCpSSRl31ARcWp135a7q4hTM6DogjJ22qH0s9' : MCC_PAYPAL_API_SIGNATURE;
+$config['APIUsername'] = $config['Sandbox'] ? 'shibi.arora_api1.gmail.com' : MCC_PAYPAL_API_USERNAME;
+$config['APIPassword'] = $config['Sandbox'] ? '72TFP55BLMJTFZCL' : MCC_PAYPAL_API_PASSWORD;
+$config['APISignature'] = $config['Sandbox'] ? 'AFcWxV21C7fd0v3bYYYRCpSSRl31Atf02ZuSwtecV3jm9DgWBbenjkZ1' : MCC_PAYPAL_API_SIGNATURE;
 
 /*
  * Payflow Gateway API Credentials

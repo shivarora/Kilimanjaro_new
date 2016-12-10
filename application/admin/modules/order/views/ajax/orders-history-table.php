@@ -109,7 +109,7 @@ if ($comp_color) {
 
     <div class="top-order-history-srh-btn text-right">
 
-        <button class="btn btn-default" onclick="letSearch()"> <i class="fa fa-search fa-sm"></i> Search  </button>
+        <button class="btn btn-default" onclick="letSearch()"> <i class="fa fa-search fa-sm"></i> All Orders  </button>
 
     </div>
 

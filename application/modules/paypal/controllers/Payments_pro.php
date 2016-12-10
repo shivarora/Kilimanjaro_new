@@ -380,8 +380,7 @@ class Payments_pro extends Front_Controller
                     );
 
         $PayPalResult = $this->paypal_pro->SetExpressCheckout($PayPalRequestData);
- // echo "<pre>";
- // print_r($PayPalResult); exit;
+
 
         if(!$this->paypal_pro->APICallSuccessful($PayPalResult['ACK']))
         {
@@ -390,12 +389,17 @@ class Payments_pro extends Front_Controller
         }
         else
         {
+
+
+                 echo "<pre>";
+                 print_r($PayPalResult);
+                 exit();
             // Successful call.  Load view or whatever you need to do here.    
-            if(MCC_PAYPAL_DEMO_MODE == 'TEST') { 
+           // if(MCC_PAYPAL_DEMO_MODE == 'TEST') { 
              redirect( 'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=' . $PayPalResult['TOKEN'] );
-              }else{
+             // }else{
              // redirect( 'https://www.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=' . $PayPalResult['TOKEN'] );
-           }
+           //}
         }
     }
 
