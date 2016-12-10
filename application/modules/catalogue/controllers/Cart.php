@@ -431,9 +431,11 @@ class Cart extends Front_Controller {
             return false;
         }
 
+
         if ($this->session->userdata('CheckoutAddress') == null) {
                 redirect('customer/shipping_details');
         }   
+
 
         
        if ($this->session->userdata('shipping_charges') == null) {
@@ -441,10 +443,32 @@ class Cart extends Front_Controller {
             
 
                  //get shipping price
-            $json_string = file_get_contents("http://localhost:3000/");
-            //json string to array
-            $parsed_arr = json_decode($json_string,true);
+             $url = "http://shivarora.co.uk/";
+                $ch = curl_init();
+                curl_setopt ($ch, CURLOPT_URL, $url);
+                curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, 20);
+                curl_setopt ($ch, CURLOPT_RETURNTRANSFER, true);
+                $contents = curl_exec($ch);
+                if (curl_errno($ch)) {
+                  echo curl_error($ch);
+                  echo "\n<br />";
+                  $contents = '';
+                } else {
+                  curl_close($ch);
+                }
 
+                if (!is_string($contents) || !strlen($contents)) {
+                    //echo "Failed to get contents.";
+                    $contents = '';
+                }
+
+                
+            //json string to array
+            $parsed_arr = json_decode($contents,true);
+
+            
+            //json string to array
+                 
             if($parsed_arr['message'] == 'Success'){
 
                 $shipping_charges = $parsed_arr['data']['RateReplyDetails'][0]['RatedShipmentDetails'][0]['ShipmentRateDetail']['TotalNetChargeWithDutiesAndTaxes']['Amount'];

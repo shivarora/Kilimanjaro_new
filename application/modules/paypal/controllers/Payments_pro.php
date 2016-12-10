@@ -424,14 +424,30 @@ class Payments_pro extends Front_Controller
         $this->load->model('customer/Ordermodel');
         //$this->load->model('customer/Ordermodel');
     
+                //set up the shipment now
+             
+                $url = "http://shivarora.co.uk/ship";
+                $ch = curl_init();
+                curl_setopt ($ch, CURLOPT_URL, $url);
+                curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, 20);
+                curl_setopt ($ch, CURLOPT_RETURNTRANSFER, true);
+                $contents = curl_exec($ch);
+                if (curl_errno($ch)) {
+                  echo curl_error($ch);
+                  echo "\n<br />";
+                  $contents = '';
+                } else {
+                  curl_close($ch);
+                }
 
-    //set up the shipment now
-     
-    $json_string = file_get_contents("http://localhost:3000/ship");
-    //json string to array
-    $parsed_arr = json_decode($json_string,true);
-
-
+                if (!is_string($contents) || !strlen($contents)) {
+                    //echo "Failed to get contents.";
+                    $contents = '';
+                }
+            
+            //json string to array
+            $parsed_arr = json_decode($contents,true);
+    
     if($parsed_arr['message'] == 'Success'){
 
         $track_response = $parsed_arr['data']['CompletedShipmentDetail']['CompletedPackageDetails'][0]['TrackingIds'][0]['TrackingNumber'];
