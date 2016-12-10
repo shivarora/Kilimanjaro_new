@@ -389,17 +389,7 @@ class Payments_pro extends Front_Controller
         }
         else
         {
-
-
-                 echo "<pre>";
-                 print_r($PayPalResult);
-                 exit();
-            // Successful call.  Load view or whatever you need to do here.    
-           // if(MCC_PAYPAL_DEMO_MODE == 'TEST') { 
-             redirect( 'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=' . $PayPalResult['TOKEN'] );
-             // }else{
-             // redirect( 'https://www.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=' . $PayPalResult['TOKEN'] );
-           //}
+             redirect($PayPalResult['REDIRECTURL'] );
         }
     }
 
@@ -433,23 +423,31 @@ class Payments_pro extends Front_Controller
         $tracking_no = "";
         $this->load->model('customer/Ordermodel');
         //$this->load->model('customer/Ordermodel');
-        if($this->session->userdata('pdf_res')){
-            $pdf_res = $this->session->userdata('pdf_res');
-            $tracking_no   = $pdf_res['token'];
-            $pdf_file_name = $pdf_res['pdffile'];
-        }
+    
 
+    //set up the shipment now
+     
+    $json_string = file_get_contents("http://localhost:3000/ship");
+    //json string to array
+    $parsed_arr = json_decode($json_string,true);
+
+
+    if($parsed_arr['message'] == 'Success'){
+
+        $track_response = $parsed_arr['data']['CompletedShipmentDetail']['CompletedPackageDetails'][0]['TrackingIds'][0]['TrackingNumber'];
+        $tracking_no =  $track_response;
+    }
+        
 
     $this->db->where('id', $response['order_number']);
         $this->db->update('order', array(
             'is_paid' => '1', 
             'transaction_no' => $response['PAYMENTS'][0]['TRANSACTIONID'], 
-            'status' => $response['PAYMENTS'][0]['PAYMENTSTATUS'],
-            'shipping_name' => $this->session->userdata('shipping_name'),
+            'status' => 'Processed',
             'shipping_charges' => $this->session->userdata('shipping_charges'),
             'track_num' => $tracking_no,
-            'shipping_pdf' => $pdf_file_name
             ));
+     
         $orderDetail = $this->Ordermodel->getGuestOrderDetail($response['order_number']);
         $this->session->unset_userdata('checkoutRole');
         $this->session->unset_userdata('user_register');
@@ -458,9 +456,8 @@ class Payments_pro extends Front_Controller
         $this->session->unset_userdata('guestUserInfo');
         $this->session->unset_userdata('last_order');
         $this->session->unset_userdata('paypal_status');
-        $this->session->unset_userdata('shipping_name');
         $this->session->unset_userdata('shipping_charges');
-        $this->session->unset_userdata('pdf_res');
+       
 //        echo base_url('paypal/order_placed/'.$orderDetail['order_num']);
         //   file_put_contents( 'ipn_errors.log', $body);
         $this->Cartmodel->emptyCart();
@@ -483,9 +480,8 @@ class Payments_pro extends Front_Controller
         $inner = array();
         $shell = array();
         $this->session->unset_userdata('CheckoutAddress');
-        $this->session->unset_userdata('shipping_name');
         $this->session->unset_userdata('shipping_charges');
-        $this->session->unset_userdata('pdf_res');
+        
 //      
         $shell['contents'] = $this->load->view("order-cancel", $inner, true);
         $this->load->view("themes/" . THEME . "/templates/subpage", $shell);
