@@ -32,8 +32,7 @@
 
                                 <th>Order Time</th>
                                 <th>Status</th>
-
-
+                                <th>FedEx Tracking Number</th>
                                 <th>View</th>
 
                             </tr>
@@ -57,6 +56,8 @@
                                         <td><?php echo $v['order_time']; ?></td>
 
                                         <td><?php echo $v['status']; ?></td>
+
+                                        <td><?php echo $v['track_num']; ?></td>
 
                                         <td><a href="<?php echo createUrl('customer/order/details/') . $v['order_num']; ?>"><div class="button"> View Order</div></a>
 
