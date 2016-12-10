@@ -21,6 +21,7 @@ class Cms extends Front_Controller {
     }
 
     function index() {
+
         $this->load->helper('url');
         $this->load->helper('text');
         $this->load->library('Cart');
@@ -37,8 +38,8 @@ class Cms extends Front_Controller {
             if ($company) {
                 $sess_array['unique_code'] = $company->unique_code;
                 $sess_array['company_user_id'] = $company->user_id;
-                $sess_array['company_id'] = $company->conpany_id;
-                $sess_array['company_name'] = $company->company_name;
+                $sess_array['company_id'] = $company->company_name;
+                $sess_array['company_name'] = $company->scout_name;
                 $this->session->set_userdata('company', $sess_array);
                 redirect(base_url());
             } 

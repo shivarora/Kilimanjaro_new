@@ -108,7 +108,7 @@ class OrderModel extends Commonmodel {
                 if ($conpany) {
                     $order['unique_code'] = $conpany['unique_code'];
                     $order['com_user_id'] = $conpany['company_user_id'];
-                    $order['company_id'] = $conpany['company_id'];
+                    $order['company_id'] = $conpany['company_user_id'];
                 }
                 /*
                   $cart_total = $this->cart->total();
