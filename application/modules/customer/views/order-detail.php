@@ -132,10 +132,10 @@ $CI->load->model('catalogue/Productmodel');
                                             </tr>
                                         </tfoot>
                                     </table>
-                                    <ul class="checkout-types">
+                                    <!-- <ul class="checkout-types">
                                         <li>    <span class="button btn-proceed-checkout btn-checkout"><a href="<?php echo base_url('customer/order/reorder/' . $order['order_num']) ?>">Reorder Now</a></span>
                                         </li>
-                                    </ul>
+                                    </ul> -->
                                 </div>
                             </div>
                         </div>
