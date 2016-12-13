@@ -173,9 +173,9 @@ class OrderModel extends Commonmodel {
                     $order_ship_detail['order_email'] = $userInfo['uacc_email'];
                     $order_ship_detail['last_name'] = $userInfo['upro_first_name'];
                 } else {
-                    $order_ship_detail['first_name'] = "";
-                    $order_ship_detail['order_email'] = "";
-                    $order_ship_detail['last_name'] = "";
+                    $order_ship_detail['first_name'] = $_SESSION['flexi_auth']['custom_user_data']['upro_first_name'];
+                    $order_ship_detail['order_email'] = $_SESSION['flexi_auth']['custom_user_data']['uacc_email'];
+                    $order_ship_detail['last_name'] = $_SESSION['flexi_auth']['custom_user_data']['upro_last_name'];;
                 }
                 $this->Orderitemmodel->insert_bulk($orderItems);
                 $this->Ordershipdetmodel->insert($order_ship_detail);

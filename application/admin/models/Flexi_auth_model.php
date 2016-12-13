@@ -150,6 +150,8 @@ class Flexi_auth_model extends Flexi_auth_lite_model
 		}
 		
 		###+++++++++++++++++++++++++++++++++###
+
+	
 		
 		// Get group ID if it was passed in additional data array.
 	    if (isset($custom_data[$this->auth->database_config['user_group']['columns']['id']]) && is_numeric($custom_data[$this->auth->database_config['user_group']['columns']['id']]))
@@ -179,7 +181,7 @@ class Flexi_auth_model extends Flexi_auth_lite_model
 		
 		// Main user account table.	
 	    $sql_insert = array(
-			$this->auth->tbl_col_user_account['group_id'] => 4,
+			$this->auth->tbl_col_user_account['group_id'] => $group_id,
 			$this->auth->tbl_col_user_account['email'] => $email,
 			$this->auth->tbl_col_user_account['username'] => ($username) ? $username : '',
 			$this->auth->tbl_col_user_account['password'] => $hash_password,
@@ -187,7 +189,7 @@ class Flexi_auth_model extends Flexi_auth_lite_model
 			$this->auth->tbl_col_user_account['last_login_date'] => $this->database_date_time(),
 			$this->auth->tbl_col_user_account['date_added'] => $this->database_date_time(),
 			$this->auth->tbl_col_user_account['activation_token'] => $activation_token,
-			$this->auth->tbl_col_user_account['active'] => 0,		
+			$this->auth->tbl_col_user_account['active'] => 1,		
 			$this->auth->tbl_col_user_account['suspend'] => $suspend_account		
 		);
 

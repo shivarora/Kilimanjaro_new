@@ -262,7 +262,7 @@
                                             resultdata = $.parseJSON(data);
                                             if (resultdata.qty != null && resultdata.amount != null) {
                                                 $(".qty-val").text(resultdata.qty);
-                                                $(".amt-val").text("£" + (resultdata.amount).replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                                                $(".amt-val").text("$" + (resultdata.amount).replace(/\B(?=(\d{3})+(?!\d))/g, ","));
                                             } else {
                                                 $(".qty-val").text(0);
                                                 $(".amt-val").text(0);
@@ -292,7 +292,7 @@
                                         resultdata = $.parseJSON(data);
                                         if (resultdata.qty != null && resultdata.amount != null) {
                                             $(".qty-val").text(resultdata.qty);
-                                            $(".amt-val").text("£" + (resultdata.amount).replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                                            $(".amt-val").text("$" + (resultdata.amount).replace(/\B(?=(\d{3})+(?!\d))/g, ","));
                                         } else {
                                             $(".qty-val").text(0);
                                             $(".amt-val").text(0);

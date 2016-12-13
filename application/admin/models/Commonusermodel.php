@@ -95,11 +95,12 @@ class CommonuserModel extends Commonmodel {
 	 * Gets a paginated list of users that can be filtered via the user search form, filtering by the users email and first and last names.
 	 */
 	function get_comp_user_accounts($offset = False, $limit = 10) {
+		
+		$logged_user = $this->flexi_auth->get_user_custom_data();
 		$form_data = [];
 		parse_str($this->input->post("form_data"), $form_data);
 		$sql_like_where = [];
-		$logged_user_is_sub_admin = $this->flexi_auth->get_user_custom_data( 'upro_subadmin' );
-		$logged_user_creator_id = $this->flexi_auth->get_user_custom_data( 'upro_creater_id' );		
+			
 		// Select user data to be displayed.
 		$sql_select = [
 						$this->flexi_auth->db_column('user_acc', 'id'),
@@ -109,124 +110,172 @@ class CommonuserModel extends Commonmodel {
 						$this->flexi_auth->db_column('user_acc', 'username'),
 						$this->flexi_auth->db_column('user_group', 'name'),
 						'upro_first_name', 'upro_last_name', 'upro_company', 'upro_subadmin', 'upro_creater_id', 'upro_direct_order', 
-						'upro_profession', 'upro_approval_acc', 'upro_approval_acc'
+						'upro_profession', 'upro_approval_acc', 'upro_approval_acc','uacc_group_fk'
 					];
 		$this->flexi_auth->sql_select($sql_select);
-		$sql_where[$this->flexi_auth->db_column('user_acc', 'id').' !='] = $this->flexi_auth->get_user_id();
 		
-		/* IF Sub admin */
-		if( $logged_user_is_sub_admin ){
-			$sql_where['upro_creater_id !='] = $logged_user_creator_id;
-			$sql_where[$this->flexi_auth->db_column('user_acc', 'id').' !='] = $logged_user_creator_id;
-		}
-		/*
-			for exclude company 
-			if ( !com_gParam('view_all_other_groups', 1 , false) ) {
-				$sql_where['upro_company !='] = '';
-			}
-		*/
-	 	$user_group	= $this->flexi_auth->get_user_group();	 	
+	 	$user_group	= $this->flexi_auth->get_user_group();	
+
 	 	if( isset( $form_data[ 'userGroup' ] ) && $form_data[ 'userGroup' ] ){
 			$sql_where[$this->flexi_auth->db_column('user_group', 'id')] = $form_data[ 'userGroup' ];
 	 	}
 	 	if( isset( $form_data[ 'userName' ] )  && $form_data[ 'userName' ] ){
 	 		$sql_like_where[ $this->flexi_auth->db_column('user_acc', 'username') ] = $form_data[ 'userName' ];	 		
-	 	}
+	 	} 
 
-		//$sql_where[$this->flexi_auth->db_column('user_group', 'name')] = USER;
+		if($user_group == CMP_PM){
+			$logged_user = $this->flexi_auth->get_user_custom_data();
+			$sql_where['upro_company'] = $logged_user['upro_company'];
+			$sql_where['upro_approval_acc'] = $this->flexi_auth->get_user_id();
 
-	 		
-	 	
-	 	if( in_array($user_group,[ CMP_MD, CMP_PM ] ) ) {
-			$company_code = $this->flexi_auth->get_user_custom_data();
--           $sql_where['upro_company'] = $company_code['upro_company'];
+			
+		 	if( $sql_where ){
+		 		$this->flexi_auth->sql_where( $sql_where );
+		 	}
+		 	if( $sql_like_where ){
+		 		$this->flexi_auth->sql_like( $sql_like_where );
+		 	}
+			
+			$search_query = FALSE;		
+			$total_users = $this->flexi_auth->search_users_query($search_query, FALSE, FALSE, FALSE, TRUE)->num_rows();				
+			$this->flexi_auth->sql_limit($limit, $offset);
+
+			$this->data['users'] = $this->flexi_auth->search_users_array($search_query, FALSE, FALSE, FALSE, TRUE);
+
 		}
 	 	/* Company admin */
 	 	else if ( $user_group == CMP_ADMIN ) {
 	 		$company_code = $this->flexi_auth->get_comp_admin_company_code();
-	 		$sql_where['upro_company'] = $company_code;	 		
+	 		$sql_where['upro_company'] = $company_code;	 
+
+
+		 	if( $sql_where ){
+		 		$this->flexi_auth->sql_where( $sql_where );
+		 	}
+		 	if( $sql_like_where ){
+		 		$this->flexi_auth->sql_like( $sql_like_where );
+		 	}
+		 	
+	 		$search_query = FALSE;		
+			$total_users = $this->flexi_auth->search_users_query($search_query, FALSE, FALSE, FALSE, TRUE)->num_rows();				
+			$this->flexi_auth->sql_limit($limit, $offset);
+
+			$this->data['users'] = $this->flexi_auth->search_users_array($search_query, FALSE, FALSE, FALSE, TRUE);		
 	 	}
-	 	/* Normal User */
-	 	else if ( !in_array( $user_group, [ ADMIN, CMP_ADMIN, CMP_PM, CMP_MD ] ) ) {
-			$sql_where[$this->flexi_auth->db_column('user_group', 'name')] = '';
+	 	else if ( $user_group == CMP_MD  ) {
+			
+			$sql_where['upro_approval_acc'] = $this->flexi_auth->get_user_id();
+
+			if( $sql_where ){
+			 		$this->flexi_auth->sql_where( $sql_where );
+		 	}
+
+			$search_query = FALSE;		
+			
+			$scout_users = $this->flexi_auth->search_users_array($search_query, FALSE, FALSE, FALSE, TRUE);
+
+			$this->flexi_auth->sql_clear();
+
+			$scout_array = [];
+			$users = [];
+
+			// Select user data to be displayed.
+		$sql_select = [
+						$this->flexi_auth->db_column('user_acc', 'id'),
+						$this->flexi_auth->db_column('user_acc', 'email'),
+						$this->flexi_auth->db_column('user_acc', 'active'),
+						$this->flexi_auth->db_column('user_acc', 'suspend'),
+						$this->flexi_auth->db_column('user_acc', 'username'),
+						$this->flexi_auth->db_column('user_group', 'name'),
+						'upro_first_name', 'upro_last_name', 'upro_company', 'upro_subadmin', 'upro_creater_id', 'upro_direct_order', 
+						'upro_profession', 'upro_approval_acc', 'upro_approval_acc','uacc_group_fk'
+					];
+		$this->flexi_auth->sql_select($sql_select);
+
+			$scout_array[]= $this->flexi_auth->get_user_id();
+	        foreach ($scout_users as $key => $value) {
+	    		//creating scout array , so we will get user under these scouts only
+				$scout_array[] = $value['uacc_id'];    
+
+				$sql_where['upro_approval_acc'] = $value['uacc_id'];			
+				$this->flexi_auth->sql_where( $sql_where );
+				$search_query = FALSE;		
+			
+				$users[] = $this->flexi_auth->search_users_array($search_query, FALSE, FALSE, FALSE, TRUE);
+	     	}
+
+	     	$last_key = key( array_slice( $users[0], -1, 1, TRUE ));
+
+	     	foreach ($scout_users as $key => $value) {
+	     		# code...
+	     		$scout_users[$last_key + 1] = $value;
+	     		$last_key = $last_key + 1;
+	     		unset($scout_users[$key]);
+	     	}
+
+			 	$all_users = $users[0] + $scout_users;
+     				
+     			
+     			$total_users = count($all_users);
+
+     			$this->data['users'] = $all_users;
+
+
+
+     				 
+     			if(isset($form_data['userName']) && $form_data['userName'] != "" ){
+
+			 		 foreach ($this->data['users'] as $key => $value) {
+			 		 	# code...
+			 		 	if(strtolower($value['uacc_username']) == $form_data['userName']){
+
+			 		 	}else{
+			 		 		unset($this->data['users'][$key]);
+			 		 	}
+			 		 }
+
+		 		}
+
+
+
+			 if(!isset($form_data['userName']) || $form_data['userName'] == ""){
+
+			 	if($offset == ""){
+
+		 			foreach ($this->data['users'] as $key => $value) {
+		 				# code...
+		 				if($key > 9){
+		 					unset($this->data['users'][$key]);		
+		 				}
+	 				}
+			 	}else{
+			 		foreach ($this->data['users'] as $key => $value) {
+		 				# code...
+		 				if($key < $offset){
+		 					unset($this->data['users'][$key]);		
+		 				}
+	 				}
+			 	}
+
+			 }		
+
+			 			 
+	     		
 	 	}
 
-	 	if( $sql_where ){
-	 		$this->flexi_auth->sql_where( $sql_where );
-	 	}
-	 	if( $sql_like_where ){
-	 		$this->flexi_auth->sql_like( $sql_like_where );
-	 	}	 	
+		
+
 		/*
 			For More reference visit flex-auth-library 
 		*/
 		// Get users and total row count for pagination.
 		// Custom SQL SELECT, WHERE and LIMIT statements have been set above using the sql_select(), sql_where(), sql_limit() functions.
 		// Using these functions means we only have to set them once for them to be used in future function calls.		
-		$search_query = FALSE;		
-		$total_users = $this->flexi_auth->search_users_query($search_query, FALSE, FALSE, FALSE, TRUE)->num_rows();				
-		$this->flexi_auth->sql_limit($limit, $offset);
-
-		$this->data['users'] = $this->flexi_auth->search_users_array($search_query, FALSE, FALSE, FALSE, TRUE);
-
-
-
-	
-
-		$scout_array = [];
-		if($this->user_type == 'Council'){
-			$scout_array[]= $company_code['uacc_id'];
-            foreach ($this->data['users'] as $key => $value) {
-                // # code...
-                if($value['ugrp_name'] == 'Company'){
-                    unset($this->data['users'][$key]);
-                }elseif($value['ugrp_name'] == 'Council'){
-                    unset($this->data['users'][$key]);
-                }elseif ($value['ugrp_name'] == 'Scout') {
-                	# code...
-                	if($value['upro_creater_id'] != $company_code['uacc_id']){
-                		unset($this->data['users'][$key]);
-                	}else{
-                		//creating scout array , so we will get user under these scouts only
-
-            			$scout_array[] = $value['uacc_id'];
-                	}
-                }                
-            
-            }    
-
-           
-            foreach ($this->data['users'] as $key => $value) {
-            	# code...
-            	if($value['ugrp_name'] == 'Front User'){
-            		if(!in_array($value[upro_creater_id], $scout_array)){
-            			unset($this->data['users'][$key]);
-            			//exit();
-            		}
-            	}
-            }
-        }
-
-
-        if($this->user_type == 'Scout'){
-			foreach ($this->data['users'] as $key => $value) {
-                // # code...
-                if($value['ugrp_name'] == 'Company'){
-                    unset($this->data['users'][$key]);
-                }elseif($value['ugrp_name'] == 'Council'){
-                    unset($this->data['users'][$key]);
-                }elseif($value['ugrp_name'] == 'Scout'){
-                    unset($this->data['users'][$key]);
-                }elseif ($value['ugrp_name'] == 'Front User') {
-                	# code...
-                	if($value['upro_creater_id'] != $company_code['uacc_id']){
-                		unset($this->data['users'][$key]);
-                	}
-                }                
-            
-            }    
-        }
 		
+		
+
+	 	//$total_users = count($this->data['users']);
+			
 		//pagination configuration		
 		$config['cur_page'] 		= 	$offset;
 		$config['total_rows'] 		= 	$total_users;
@@ -384,10 +433,11 @@ class CommonuserModel extends Commonmodel {
 			 * $profile_data['upro_subadmin']  = 1;
 			 * admin user removed so now only company user			 
 			 * */
+
 			
 			$tmp = [ $email, $username, $password, $profile_data, $new_user_profile, $instant_active ];
 
-			$user_id = $this->flexi_auth->insert_user($email, $username, $password, $profile_data, $new_user_profile, $instant_active);
+			$user_id = $this->flexi_auth->insert_user($email, $username, $password, $profile_data, $new_user_profile);
 			
 			/* 
 			 * Sub admin removed

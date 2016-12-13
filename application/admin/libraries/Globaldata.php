@@ -79,7 +79,7 @@ class Globaldata {
         define('GUEST', 'Guest User');
 //        define('CMP_MD', 'Director');
 //        define('CMP_PM', 'Purchase Manager');
-        define('CMP_MD', 'Council');
+        define('CMP_MD', 'Troop');
         define('CMP_PM', 'Scout');
 
 

@@ -16,6 +16,10 @@ class User extends Adminajax_Controller {
 	function index( ) {
 		$offset = com_gParam('offset', false , false); 
 		$this->Commonusermodel->get_comp_user_accounts($offset);
+
+		//unset the profession as not required.
+        unset($this->data['table_labels']['upro_profession']);
+        
         $output = [
                     'success' => 1,
                     'csrf_hash' => $this->security->get_csrf_hash(),
@@ -66,7 +70,7 @@ class User extends Adminajax_Controller {
 				$title = 'Register user';
 				$req_user_groups = 7;
 			} else if( $user_profile == 7 ) {
-				$title = 'Council';
+				$title = 'Troop';
 				$req_user_groups = 6;				
 			}
 			$opt = [];

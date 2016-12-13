@@ -115,13 +115,13 @@
                                 <td><strong> Phone2 </strong></td>
                                 <td><?= $details['phone2']; ?> </td>
                             </tr>
-                            <tr>
+                          <!--   <tr>
 								<?php
 									$hidden = $attr = [];
 									$attr[ 'id' ] 	= 'company-logo';
 									$attr[ 'name' ] = 'company-logo';
 									$hidden[ 'company_id' ] = $details[ 'id' ];
-									echo form_open_multipart('company/logo_add', $attr, $hidden);
+									//echo form_open_multipart('company/logo_add', $attr, $hidden);
 								?>
                                 
                                 <td>
@@ -136,15 +136,15 @@
 										</div>
 										<div  style="width:40%; float:right; margin-top:4px;">
 										<?php
-											echo form_submit('upload_logo', 'Upload', ' style="pull-right"  class="btn btn-primary"');
+											//echo form_submit('upload_logo', 'Upload', ' style="pull-right"  class="btn btn-primary"');
 										?>
 										</div>
 									</div>
                                 </td>
 								<?php
-									echo form_close();
+									//echo form_close();
 								?>
-                            </tr>
+                            </tr> -->
                         </tbody>
                     </table>
                     

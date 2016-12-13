@@ -16,7 +16,7 @@
                                             <img src="http://KilimanjaroCoffeeCupCompany/imgs/logo.jpg" alt="KilimanjaroCoffeeCupCompany"> 
                                         </a>
                                     </td>
-                                    <td align="left" width="40%"><h1 class="collapse" style="font-size: 30px;"> Order Confirmation </h1></td> 
+                                    <td align="left" width="40%"><h1 class="collapse" style="font-size: 30px;"> Your Order has been successfully placed. </h1></td> 
                                 </tr>
                             </thead>
                         </table>
@@ -42,26 +42,5 @@
                                 </tr>
                             </thead>
                         </table>
-                        
-                    
-                        
-                        <table style="width: 900px;margin:0 auto;">
-                            <tbody>
-                                <tr>
-                                    <td width="100%" style="text-align: center;padding-top: 35px">
-                                    Please click the following link to make the payment using paypal:</br>
-                                        <a style="color: rgb(0, 0, 0); text-decoration: none; font-weight: 600; font-size: 16px;" href="#">
-                                             <b><?php echo $paypal_url; ?></b>
-                                        </a>
-                                    </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        
-
-                                                            <!-- End Code Line -->
-
-                                                            
-
-
+                 
                                 </body></html>

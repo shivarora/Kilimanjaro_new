@@ -437,10 +437,16 @@ class Cart extends Front_Controller {
         }   
 
 
+     
         
        if ($this->session->userdata('shipping_charges') == null) {
             
-            
+            if($this->session->userdata('CheckoutAddress')['uadd_county'] == 'LA'){
+                //If county is LA , then shipping price is fixed 2 dollar.
+                $shipping_charges = 2;
+                $this->session->set_userdata(array('shipping_charges' => $shipping_charges));
+                
+            }else{
 
                  //get shipping price
              $url = "http://shivarora.co.uk/";
@@ -468,14 +474,16 @@ class Cart extends Front_Controller {
 
             
             //json string to array
-                 
-            if($parsed_arr['message'] == 'Success'){
+                     
+                if($parsed_arr['message'] == 'Success'){
 
-                $shipping_charges = $parsed_arr['data']['RateReplyDetails'][0]['RatedShipmentDetails'][0]['ShipmentRateDetail']['TotalNetChargeWithDutiesAndTaxes']['Amount'];
+                    $shipping_charges = $parsed_arr['data']['RateReplyDetails'][0]['RatedShipmentDetails'][0]['ShipmentRateDetail']['TotalNetChargeWithDutiesAndTaxes']['Amount'];
 
-                    $this->session->set_userdata(array('shipping_charges' => $shipping_charges));
+                        $this->session->set_userdata(array('shipping_charges' => $shipping_charges));
 
-            }
+                }
+            }    
+
             
         }
 

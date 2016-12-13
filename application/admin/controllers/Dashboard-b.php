@@ -70,7 +70,7 @@ class Dashboard extends Admin_Controller {
         if (!empty($this->data['user_profile']->upro_approval_acc) && $this->data['user_profile']->upro_approval_acc) {
 
 
-            $this->data['user_approval_title'] = $this->data['user_profile']->ugrp_name == USER ? 'Register User' : 'Council';
+            $this->data['user_approval_title'] = $this->data['user_profile']->ugrp_name == USER ? 'Register User' : 'Troop';
             $opt = [];
             $opt['result'] = 'row';
             $opt['select'] = 'upro_first_name, upro_last_name';

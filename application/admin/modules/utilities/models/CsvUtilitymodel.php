@@ -278,9 +278,9 @@ class CsvUtilitymodel extends Commonmodel {
 							$profile_data['upro_company'] = $company_code;
 						}
 						
-						$check = array( $email, $username, $password, $profile_data, $new_user_profile, $instant_active );					
+						$check = array( $email, $username, $password, $profile_data, 4 );					
 						
-						$user_id = $this->flexi_auth->insert_user($email, $username, $password, $profile_data, $new_user_profile, $instant_active);
+						$user_id = $this->flexi_auth->insert_user($email, $username, $password, $profile_data, 4);
 										 		
 
 						if($this->input->post('activation_type', true) == 'direct'){
@@ -304,10 +304,7 @@ class CsvUtilitymodel extends Commonmodel {
             $iterator++;
         }
 
-        	 echo "<pre>";
-        	 print_r($this->csv_data_report);
-        	 exit();
+        redirect('/user');
 
-        com_array_to_csv($this->csv_data_report, "users_upload_report.csv");
 	}
 }

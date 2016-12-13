@@ -109,7 +109,7 @@ if ($comp_color) {
 
     <div class="top-order-history-srh-btn text-right">
 
-        <button class="btn btn-default" onclick="letSearch()"> <i class="fa fa-search fa-sm"></i> All Orders  </button>
+        <button class="btn btn-default" onclick="letSearch()"> <i class="fa fa-search fa-sm"></i> Search  </button>
 
     </div>
 
@@ -146,6 +146,12 @@ if ($comp_color) {
                 <th role="columnheader" tabindex="0" aria-controls="table" rowspan="1" colspan="1" style="width: 100px;" >
 
                     Ordered By
+
+                </th>
+
+                <th role="columnheader" tabindex="0" aria-controls="table" rowspan="1" colspan="1" style="width: 100px;" >
+
+                    Email
 
                 </th>
 
@@ -210,6 +216,12 @@ if ($comp_color) {
 
                     echo '<br/><div><small>Select group first</small></div>';
                     ?>
+
+                </td>
+
+
+                <td>
+
 
                 </td>
 
@@ -388,6 +400,8 @@ if ($comp_color) {
                     <td><?= $orderDet['ugrp_name']; ?></td>
 
                     <td ><?= ucfirst($orderDet['uacc_username']); ?></td>
+
+                    <td ><?= ucfirst($orderDet['uacc_email']); ?></td>
 
                     <td ><?= date('d-M-Y', strtotime($orderDet['order_date'])); ?></td> 
 

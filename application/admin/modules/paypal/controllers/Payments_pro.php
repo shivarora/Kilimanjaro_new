@@ -30,6 +30,10 @@ class Payments_pro extends Admin_Controller
 		}
 		
 		$this->load->library('Paypal_pro', $config);	
+
+
+        //Run the checkout here
+        $this->Set_express_checkout();
 	}
 	
 	
@@ -243,16 +247,58 @@ class Payments_pro extends Admin_Controller
 
                     $orderItems = $this->Ordermodel->getOrderItems($order_number);
 
+                    //Add shipping charges based on location.
 
+                    $shipping_charges = 0;
+                    
+                    if($orderDetail['county'] == 'LA'){
+                        //If county is LA , then shipping price is fixed 2 dollar.
+                        $shipping_charges = 2;
+                        
+                    }else{
+
+                         //get shipping price
+                     $url = "http://shivarora.co.uk/";
+                        $ch = curl_init();
+                        curl_setopt ($ch, CURLOPT_URL, $url);
+                        curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, 20);
+                        curl_setopt ($ch, CURLOPT_RETURNTRANSFER, true);
+                        $contents = curl_exec($ch);
+                        if (curl_errno($ch)) {
+                          echo curl_error($ch);
+                          echo "\n<br />";
+                          $contents = '';
+                        } else {
+                          curl_close($ch);
+                        }
+
+                        if (!is_string($contents) || !strlen($contents)) {
+                            //echo "Failed to get contents.";
+                            $contents = '';
+                        }
+
+                        
+                    //json string to array
+                    $parsed_arr = json_decode($contents,true);
+                 
+                    //json string to array
+                             
+                        if($parsed_arr['message'] == 'Success'){
+
+                            $shipping_charges = $parsed_arr['data']['RateReplyDetails'][0]['RatedShipmentDetails'][0]['ShipmentRateDetail']['TotalNetChargeWithDutiesAndTaxes']['Amount'];
+
+                    
+                        }
+                    }    
                        
                     //$customer_details = $this->Customermodel->getGuestUserInfo($orderDetail['customer_id']);
 
-                    $whole_total=$orderDetail['order_total'];
+                    $whole_total=$orderDetail['order_total'] + $shipping_charges;
 
                     //TODO : Add shipping charges here
 
 
-                 	$this_script = 'http://kilimanjaro.com/admin/paypal/Payments_pro/';
+                 	$this_script = 'http://kilimanjaro.com/paypal/Payments_pro/';
 
                     $purchase_contents = $orderItems;
              
@@ -331,8 +377,8 @@ class Payments_pro extends Admin_Controller
                     $Payment = array(
                                     'amt'                     =>    round($whole_total,2),             // Required.  The total cost of the transaction to the customer.  If shipping cost and tax charges are known, include them in this value.  If not, this value should be the current sub-total of the order.
                                     'currencycode'             =>    'USD',    // A three-character currency code.  Default is USD.
-                                    'itemamt'                 =>    round($whole_total,2),     // Required if you specify itemized L_AMT fields. Sum of cost of all items in this order.  
-                                    'shippingamt' => '',    // Total shipping costs for this order.  If you specify SHIPPINGAMT you mut also specify a value for ITEMAMT.
+                                    'itemamt'                 =>    round($orderDetail['order_total'],2),     // Required if you specify itemized L_AMT fields. Sum of cost of all items in this order.  
+                                    'shippingamt' => $shipping_charges,    // Total shipping costs for this order.  If you specify SHIPPINGAMT you mut also specify a value for ITEMAMT.
                                     'shipdiscamt' => '',                     // Shipping discount for this order, specified as a negative number.
                                     'insuranceoptionoffered' => '',         // If true, the insurance drop-down on the PayPal review page displays the string 'Yes' and the insurance amount.  If true, the total shipping insurance for this order must be a positive number.
                                     'handlingamt' => '',                     // Total handling costs for this order.  If you specify HANDLINGAMT you mut also specify a value for ITEMAMT.
@@ -391,12 +437,9 @@ class Payments_pro extends Admin_Controller
                                     'Payments' => $Payments
                                 );
 
+                  
+
                     $PayPalResult = $this->paypal_pro->SetExpressCheckout($PayPalRequestData);
-
-                    $pay_url = 'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=' . $PayPalResult['TOKEN'];
-
-                    print_r($pay_url);
-                    exit();
 
                       
                     if(!$this->paypal_pro->APICallSuccessful($PayPalResult['ACK']))
@@ -407,12 +450,7 @@ class Payments_pro extends Admin_Controller
                     else
                     {
                     
-                        // Successful call.  Load view or whatever you need to do here.    
-                       // if(MCC_PAYPAL_DEMO_MODE == 'TEST') { 
-                         $pay_url = 'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=' . $PayPalResult['TOKEN'];
-                         // }else{
-                         // redirect( 'https://www.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=' . $PayPalResult['TOKEN'] );
-                               //}
+                    $pay_url = $PayPalResult['REDIRECTURL'];
 
                     $details = array();
                     $details['order_details'] = $orderDetail;
@@ -426,9 +464,9 @@ class Payments_pro extends Admin_Controller
                     $this->load->library('SEmail');
                     $email_config = [
                         'to' => $orderDetails['uacc_email'],
-                        'subject' => 'Order email',
+                        'subject' => 'Order Placed email',
                         'from' => 'kilimanjaroCoffeeCupCompany@admin.com',
-                        'body' => $emailBody
+                        'body' => $emailContent
                     ];
 
                     $status =  $this->semail->send_mail( $email_config );

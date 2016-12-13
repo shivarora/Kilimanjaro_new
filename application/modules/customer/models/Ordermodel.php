@@ -77,7 +77,6 @@ class Ordermodel extends CI_Model {
             return false;
         }
     }
-
 }
 
 ?>

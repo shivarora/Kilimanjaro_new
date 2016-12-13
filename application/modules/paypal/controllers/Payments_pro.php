@@ -42,9 +42,6 @@ class Payments_pro extends Front_Controller
         
         $orderDetailAfterExpress = $this->paypal_pro->GetExpressCheckoutDetails($_GET['token']);
 
-// echo "<pre>";
-// print_r($orderDetailAfterExpress['CUSTOM']); exit;
-
         $token = $_GET['token'];
         $payer = $_GET['PayerID'];
 
@@ -55,13 +52,11 @@ class Payments_pro extends Front_Controller
 
         $customer_details = $this->Customermodel->getGuestUserInfo($orderDetail['customer_id']);
 
-        $whole_total=$this->cart->total();
+        $whole_total = $orderDetail['cart_total'];
 
-        if ($this->session->userdata('shipping_charges') != null) {
-
-            $whole_total =  $whole_total + $this->session->userdata('shipping_charges');
-        }
-
+    
+        $whole_total =  $whole_total + $orderDetailAfterExpress['SHIPPINGAMT'];
+        
 
         $this_script = createUrl('paypal/Payments_pro/');
         $purchase_contents = $orderItems;
@@ -140,10 +135,10 @@ class Payments_pro extends Front_Controller
         // so don't get confused along the way.
         $Payments = array();
         $Payment = array(
-                        'amt'                     =>    round(($this->cart->total() + $this->session->userdata('shipping_charges')),2),             // Required.  The total cost of the transaction to the customer.  If shipping cost and tax charges are known, include them in this value.  If not, this value should be the current sub-total of the order.
+                        'amt'                     =>    round(($orderDetail['cart_total'] + $orderDetailAfterExpress['SHIPPINGAMT']),2),             // Required.  The total cost of the transaction to the customer.  If shipping cost and tax charges are known, include them in this value.  If not, this value should be the current sub-total of the order.
                         'currencycode'             =>    'USD',    // A three-character currency code.  Default is USD.
-                        'itemamt'                 =>    round($this->cart->total(),2),     // Required if you specify itemized L_AMT fields. Sum of cost of all items in this order.  
-                        'shippingamt' => round($this->session->userdata('shipping_charges'),2),    // Total shipping costs for this order.  If you specify SHIPPINGAMT you mut also specify a value for ITEMAMT.
+                        'itemamt'                 =>    round($orderDetail['cart_total'],2),     // Required if you specify itemized L_AMT fields. Sum of cost of all items in this order.  
+                        'shippingamt' => round($orderDetailAfterExpress['SHIPPINGAMT'],2),    // Total shipping costs for this order.  If you specify SHIPPINGAMT you mut also specify a value for ITEMAMT.
                         'shipdiscamt' => '',                     // Shipping discount for this order, specified as a negative number.
                         'insuranceoptionoffered' => '',         // If true, the insurance drop-down on the PayPal review page displays the string 'Yes' and the insurance amount.  If true, the total shipping insurance for this order must be a positive number.
                         'handlingamt' => '',                     // Total handling costs for this order.  If you specify HANDLINGAMT you mut also specify a value for ITEMAMT.
@@ -204,8 +199,6 @@ class Payments_pro extends Front_Controller
         $PayPalResult = $this->paypal_pro->DoExpressCheckoutPayment($PayPalRequestData);
 
 
-            // echo "<pre>";
-            // print_r($PayPalResult); exit;
         if(!$this->paypal_pro->APICallSuccessful($PayPalResult['ACK']))
         {
             $errors = array('Errors'=>$PayPalResult['ERRORS']);
@@ -379,6 +372,8 @@ class Payments_pro extends Front_Controller
                         'Payments' => $Payments
                     );
 
+
+
         $PayPalResult = $this->paypal_pro->SetExpressCheckout($PayPalRequestData);
 
 
@@ -460,11 +455,47 @@ class Payments_pro extends Front_Controller
             'is_paid' => '1', 
             'transaction_no' => $response['PAYMENTS'][0]['TRANSACTIONID'], 
             'status' => 'Processed',
-            'shipping_charges' => $this->session->userdata('shipping_charges'),
+            'shipping_charges' => $response['REQUESTDATA']['PAYMENTREQUEST_0_SHIPPINGAMT'],
             'track_num' => $tracking_no,
             ));
      
-        $orderDetail = $this->Ordermodel->getGuestOrderDetail($response['order_number']);
+         if($response['order_number']){
+          $ord_num = $response['order_number'];
+         }else{
+            $ord_num = $response['REQUESTDATA']['PAYMENTREQUEST_0_CUSTOM'];
+         }
+
+        $orderDetail = $this->Ordermodel->getGuestOrderDetail($ord_num);
+        $shipping_details = $this->Ordermodel->getShippingBillingDetails($ord_num);
+
+        $details = array();
+        $details['order_details'] = $orderDetail;
+         
+        $emailContent = $this->load->view('includes/email/backend-order',$details,true);
+     
+        $this->load->library('SEmail');
+        $email_config = [
+            'to' => $shipping_details['order_email'],
+            'subject' => 'Order Success email',
+            'from' => 'kilimanjaroCoffeeCupCompany@admin.com',
+            'body' => $emailContent
+        ];
+
+        $status =  $this->semail->send_mail( $email_config );
+        
+
+        //send email to Jrohdes
+        $email_config = [
+            'to' => 'jrhodes@kmjcoffee.com',
+            'subject' => 'Order Success email',
+            'from' => 'kilimanjaroCoffeeCupCompany@admin.com',
+            'body' => $emailContent
+        ];
+
+        $status =  $this->semail->send_mail( $email_config );
+
+        
+
         $this->session->unset_userdata('checkoutRole');
         $this->session->unset_userdata('user_register');
         $this->session->unset_userdata('guest_user_id');

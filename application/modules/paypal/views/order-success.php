@@ -50,7 +50,7 @@ $CI->load->model('catalogue/Productmodel');
                                     <th class="hidden-mobile" rowspan="1">S No.</th>
                                     <th class="hidden-mobile" rowspan="1">&nbsp;</th>
                                     <th rowspan="1"><span class="nobr">Product Name</span></th>
-                                    <th colspan="1" class="a-center">SKU</th>
+                                    <!-- <th colspan="1" class="a-center">SKU</th> -->
                                     <th class="a-center" rowspan="1">Qty</th>
                                     <th colspan="1" class="a-center"><span class="nobr">Cart total</span></th>
 
@@ -82,11 +82,11 @@ $CI->load->model('catalogue/Productmodel');
                                                 <?php echo $oproduct['order_item_name'] ?>
                                             </h4>
                                         </td>
-                                        <td class="a-center">
+                                       <!--  <td class="a-center">
                                             <span class="cart-price">
                                                 <span class=""><?php echo $oproduct['product_ref'] ?></span>                
                                             </span>
-                                        </td>
+                                        </td> -->
                                         <td class="a-center">
                                             <span class="cart-price">
                                                 <p class="price"><strong class="text-success"> <?php echo $oproduct['order_item_qty'] ?> </strong> </p>                
