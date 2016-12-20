@@ -439,8 +439,9 @@ class Payments_pro extends Front_Controller
 
              
                 //$url = "http://shivarora.co.uk/ship?checkout_data=" .$checkout_data;
+                $url = "http://shivarora.co.uk/ship/?".$query;
 
-                $url = "http://localhost:3000/ship/?".$query;
+                //$url = "http://localhost:3000/ship/?".$query;
 
 
             

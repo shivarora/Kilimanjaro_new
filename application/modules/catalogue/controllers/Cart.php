@@ -443,10 +443,6 @@ class Cart extends Front_Controller {
             
             if($this->session->userdata('CheckoutAddress')['uadd_county'] == 'LA'){
 
-
-                     echo "<pre>";
-                     print_r("i am in LA");
-                     exit();
                 //If county is LA , then shipping price is fixed 2 dollar.
                 $shipping_charges = 0.99;
                 $this->session->set_userdata(array('shipping_charges' => $shipping_charges));
@@ -467,13 +463,9 @@ class Cart extends Front_Controller {
                     'uadd_county'      => $checkout_data['uadd_county']
                     ]);
 
-            $url = "http://localhost:3000/?".$query;
+            //$url = "http://localhost:3000/?".$query;
+            $url = "http://shivarora.co.uk/?"$query;
 
-
-                 echo "<pre>";
-                 print_r($url);
-                 exit();
-                
                 $ch = curl_init();
                 curl_setopt ($ch, CURLOPT_URL, $url);
                 curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, 20);
@@ -495,11 +487,6 @@ class Cart extends Front_Controller {
                 
             //json string to array
             $parsed_arr = json_decode($contents,true);
-
-
-                 echo "<pre>";
-                 print_r($parsed_arr);
-                 exit();
 
         
             //json string to array
