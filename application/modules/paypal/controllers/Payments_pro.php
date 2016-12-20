@@ -390,6 +390,9 @@ class Payments_pro extends Front_Controller
 
 
 
+
+
+
     function ipn() {
         $p = new paypal_class;
 
@@ -418,10 +421,29 @@ class Payments_pro extends Front_Controller
         $tracking_no = "";
         $this->load->model('customer/Ordermodel');
         //$this->load->model('customer/Ordermodel');
-    
-                //set up the shipment now
+        
+        $checkout_data = $this->session->userdata('CheckoutAddress');
+
+
              
-                $url = "http://shivarora.co.uk/ship";
+                //set up the shipment now
+          $query = http_build_query([
+                    'uadd_recipient'   => $checkout_data['uadd_recipient'],
+                    'uadd_phone'       => $checkout_data['uadd_phone'],
+                    'uadd_address_01'  => $checkout_data['uadd_address_01'],
+                    'uadd_address_02'  => $checkout_data['uadd_address_02'],
+                    'uadd_city'        => $checkout_data['uadd_city'],
+                    'uadd_post_code'   => $checkout_data['uadd_post_code'],
+                    'uadd_county'      => $checkout_data['uadd_county']
+                    ]);
+
+             
+                //$url = "http://shivarora.co.uk/ship?checkout_data=" .$checkout_data;
+
+                $url = "http://localhost:3000/ship/?".$query;
+
+
+            
                 $ch = curl_init();
                 curl_setopt ($ch, CURLOPT_URL, $url);
                 curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, 20);
@@ -442,7 +464,7 @@ class Payments_pro extends Front_Controller
             
             //json string to array
             $parsed_arr = json_decode($contents,true);
-    
+        
     if($parsed_arr['message'] == 'Success'){
 
         $track_response = $parsed_arr['data']['CompletedShipmentDetail']['CompletedPackageDetails'][0]['TrackingIds'][0]['TrackingNumber'];
@@ -458,7 +480,8 @@ class Payments_pro extends Front_Controller
             'shipping_charges' => $response['REQUESTDATA']['PAYMENTREQUEST_0_SHIPPINGAMT'],
             'track_num' => $tracking_no,
             ));
-     
+        
+
          if($response['order_number']){
           $ord_num = $response['order_number'];
          }else{
@@ -466,6 +489,7 @@ class Payments_pro extends Front_Controller
          }
 
         $orderDetail = $this->Ordermodel->getGuestOrderDetail($ord_num);
+
         $shipping_details = $this->Ordermodel->getShippingBillingDetails($ord_num);
 
         $details = array();
@@ -481,7 +505,7 @@ class Payments_pro extends Front_Controller
             'body' => $emailContent
         ];
 
-        $status =  $this->semail->send_mail( $email_config );
+       // $status =  $this->semail->send_mail( $email_config );
         
 
         //send email to Jrohdes
@@ -492,9 +516,7 @@ class Payments_pro extends Front_Controller
             'body' => $emailContent
         ];
 
-        $status =  $this->semail->send_mail( $email_config );
-
-        
+       // $status =  $this->semail->send_mail( $email_config );
 
         $this->session->unset_userdata('checkoutRole');
         $this->session->unset_userdata('user_register');

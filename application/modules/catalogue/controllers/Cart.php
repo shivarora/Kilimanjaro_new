@@ -442,14 +442,38 @@ class Cart extends Front_Controller {
        if ($this->session->userdata('shipping_charges') == null) {
             
             if($this->session->userdata('CheckoutAddress')['uadd_county'] == 'LA'){
+
+
+                     echo "<pre>";
+                     print_r("i am in LA");
+                     exit();
                 //If county is LA , then shipping price is fixed 2 dollar.
-                $shipping_charges = 2;
+                $shipping_charges = 0.99;
                 $this->session->set_userdata(array('shipping_charges' => $shipping_charges));
                 
             }else{
 
-                 //get shipping price
-             $url = "http://shivarora.co.uk/";
+
+
+            $checkout_data = $this->session->userdata('CheckoutAddress');
+
+            $query = http_build_query([
+                    'uadd_recipient'   => $checkout_data['uadd_recipient'],
+                    'uadd_phone'       => $checkout_data['uadd_phone'],
+                    'uadd_address_01'  => $checkout_data['uadd_address_01'],
+                    'uadd_address_02'  => $checkout_data['uadd_address_02'],
+                    'uadd_city'        => $checkout_data['uadd_city'],
+                    'uadd_post_code'   => $checkout_data['uadd_post_code'],
+                    'uadd_county'      => $checkout_data['uadd_county']
+                    ]);
+
+            $url = "http://localhost:3000/?".$query;
+
+
+                 echo "<pre>";
+                 print_r($url);
+                 exit();
+                
                 $ch = curl_init();
                 curl_setopt ($ch, CURLOPT_URL, $url);
                 curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, 20);
@@ -472,7 +496,12 @@ class Cart extends Front_Controller {
             //json string to array
             $parsed_arr = json_decode($contents,true);
 
-            
+
+                 echo "<pre>";
+                 print_r($parsed_arr);
+                 exit();
+
+        
             //json string to array
                      
                 if($parsed_arr['message'] == 'Success'){

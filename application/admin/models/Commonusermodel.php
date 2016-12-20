@@ -94,7 +94,7 @@ class CommonuserModel extends Commonmodel {
 	 * get_user_accounts
 	 * Gets a paginated list of users that can be filtered via the user search form, filtering by the users email and first and last names.
 	 */
-	function get_comp_user_accounts($offset = False, $limit = 10) {
+	function get_comp_user_accounts($offset = False, $limit = 100) {
 		
 		$logged_user = $this->flexi_auth->get_user_custom_data();
 		$form_data = [];
@@ -115,16 +115,8 @@ class CommonuserModel extends Commonmodel {
 		$this->flexi_auth->sql_select($sql_select);
 		
 	 	$user_group	= $this->flexi_auth->get_user_group();	
-
-	 	if( isset( $form_data[ 'userGroup' ] ) && $form_data[ 'userGroup' ] ){
-			$sql_where[$this->flexi_auth->db_column('user_group', 'id')] = $form_data[ 'userGroup' ];
-	 	}
-	 	if( isset( $form_data[ 'userName' ] )  && $form_data[ 'userName' ] ){
-	 		$sql_like_where[ $this->flexi_auth->db_column('user_acc', 'username') ] = $form_data[ 'userName' ];	 		
-	 	} 
-
+ 
 		if($user_group == CMP_PM){
-			$logged_user = $this->flexi_auth->get_user_custom_data();
 			$sql_where['upro_company'] = $logged_user['upro_company'];
 			$sql_where['upro_approval_acc'] = $this->flexi_auth->get_user_id();
 
@@ -132,37 +124,39 @@ class CommonuserModel extends Commonmodel {
 		 	if( $sql_where ){
 		 		$this->flexi_auth->sql_where( $sql_where );
 		 	}
-		 	if( $sql_like_where ){
-		 		$this->flexi_auth->sql_like( $sql_like_where );
-		 	}
 			
 			$search_query = FALSE;		
-			$total_users = $this->flexi_auth->search_users_query($search_query, FALSE, FALSE, FALSE, TRUE)->num_rows();				
-			$this->flexi_auth->sql_limit($limit, $offset);
-
+			
 			$this->data['users'] = $this->flexi_auth->search_users_array($search_query, FALSE, FALSE, FALSE, TRUE);
 
 		}
 	 	/* Company admin */
-	 	else if ( $user_group == CMP_ADMIN ) {
-	 		$company_code = $this->flexi_auth->get_comp_admin_company_code();
-	 		$sql_where['upro_company'] = $company_code;	 
-
+	 	else if ( $user_group == CMP_ADMIN || $user_group == "Super Admin") {
+	 		
+	 		if($user_group == CMP_ADMIN){
+		 		$company_code = $this->flexi_auth->get_comp_admin_company_code();
+		 		$sql_where['upro_company'] = $company_code;	 
+	 		}
 
 		 	if( $sql_where ){
 		 		$this->flexi_auth->sql_where( $sql_where );
 		 	}
-		 	if( $sql_like_where ){
-		 		$this->flexi_auth->sql_like( $sql_like_where );
-		 	}
 		 	
 	 		$search_query = FALSE;		
-			$total_users = $this->flexi_auth->search_users_query($search_query, FALSE, FALSE, FALSE, TRUE)->num_rows();				
-			$this->flexi_auth->sql_limit($limit, $offset);
 
 			$this->data['users'] = $this->flexi_auth->search_users_array($search_query, FALSE, FALSE, FALSE, TRUE);		
+
+
+			foreach ($this->data['users'] as $key => $value) {
+				# code...
+				if($value['uacc_id'] == $logged_user['uacc_id']){
+					unset($this->data['users'][$key]);
+				}
+			}
+			
 	 	}
 	 	else if ( $user_group == CMP_MD  ) {
+
 			
 			$sql_where['upro_approval_acc'] = $this->flexi_auth->get_user_id();
 
@@ -235,68 +229,12 @@ class CommonuserModel extends Commonmodel {
 			 		 }
 
 		 		}
-
-
-
-			 if(!isset($form_data['userName']) || $form_data['userName'] == ""){
-
-			 	if($offset == ""){
-
-		 			foreach ($this->data['users'] as $key => $value) {
-		 				# code...
-		 				if($key > 9){
-		 					unset($this->data['users'][$key]);		
-		 				}
-	 				}
-			 	}else{
-			 		foreach ($this->data['users'] as $key => $value) {
-		 				# code...
-		 				if($key < $offset){
-		 					unset($this->data['users'][$key]);		
-		 				}
-	 				}
-			 	}
-
-			 }		
-
-			 			 
 	     		
 	 	}
 
 		
 
-		/*
-			For More reference visit flex-auth-library 
-		*/
-		// Get users and total row count for pagination.
-		// Custom SQL SELECT, WHERE and LIMIT statements have been set above using the sql_select(), sql_where(), sql_limit() functions.
-		// Using these functions means we only have to set them once for them to be used in future function calls.		
 		
-		
-
-	 	//$total_users = count($this->data['users']);
-			
-		//pagination configuration		
-		$config['cur_page'] 		= 	$offset;
-		$config['total_rows'] 		= 	$total_users;
-		$config['form_serialize'] 	= 	'user-search';
-        $config['html_container'] 	= 	'user-list-div';
-        $config['base_url']    = 	base_url().'user/ajax/user/index/';
-        $config['per_page']    = $limit;
-        $this->data['user_group'] =  $user_group;
-        $this->data['pagination'] =  com_ajax_pagination($config);
-        $this->data['table_labels'] = [
-						            'uacc_username' => 'User Name',						            
-						            'ugrp_name' => 'Profile Group',
-					            	'upro_company' => 'Company',
-					            	'upro_profession' => 'Profession',
-					            	'approval' => 'Approval Manager',
-					            	'reset-pass' => 'Reset Password',
-						            'view_profile' => 'Profile',
-						            'privilieges' => 'Privilieges',
-						            'dir_order' => 'Direct Order',						            
-						            //'action' => 'Action',
-						        ];
 	}
 
 	function get_comp_user_profile($user_id){

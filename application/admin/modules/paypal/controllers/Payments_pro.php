@@ -253,9 +253,21 @@ class Payments_pro extends Admin_Controller
                     
                     if($orderDetail['county'] == 'LA'){
                         //If county is LA , then shipping price is fixed 2 dollar.
-                        $shipping_charges = 2;
+                        $shipping_charges = 0.99;
                         
                     }else{
+
+
+                    $query = http_build_query([
+                    'uadd_recipient'   => $orderDetail['uadd_recipient'],
+                    'uadd_phone'       => $orderDetail['uadd_phone'],
+                    'uadd_address_01'  => $orderDetail['uadd_address_01'],
+                    'uadd_address_02'  => $orderDetail['uadd_address_02'],
+                    'uadd_city'        => $orderDetail['uadd_city'],
+                    'uadd_post_code'   => $orderDetail['uadd_post_code'],
+                    'uadd_county'      => $orderDetail['uadd_county']
+                    ]);
+
 
                          //get shipping price
                      $url = "http://shivarora.co.uk/";

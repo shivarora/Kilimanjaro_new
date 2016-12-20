@@ -189,7 +189,7 @@ class Flexi_auth_model extends Flexi_auth_lite_model
 			$this->auth->tbl_col_user_account['last_login_date'] => $this->database_date_time(),
 			$this->auth->tbl_col_user_account['date_added'] => $this->database_date_time(),
 			$this->auth->tbl_col_user_account['activation_token'] => $activation_token,
-			$this->auth->tbl_col_user_account['active'] => 0,		
+			$this->auth->tbl_col_user_account['active'] => 1,		
 			$this->auth->tbl_col_user_account['suspend'] => $suspend_account		
 		);
 

@@ -160,7 +160,7 @@
                             <div class="total-amtANdQty1">
                                 <div class="amtANDqty-inner ">
                                     <div class="tot-amt">
-                                        <div class="grapamt no-padding"><img src="<?= base_url(); ?>images/graphamt.png" alt="Amount" /></div>
+                                        <div class="grapamt no-padding"><img src="<?= base_url(); ?>images/scale.png" alt="Amount"  width="86px" height= "86px"/></div>
                                         <div class="amt-val no-padding"></div>
                                     </div>
                                     <div class="tot-qty">
