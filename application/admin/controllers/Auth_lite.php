@@ -4,6 +4,7 @@ class Auth_lite extends CI_Controller {
  
     function __construct() 
     {
+    	
         parent::__construct();
 		
 		// Load CI benchmark and memory usage profiler.

@@ -463,8 +463,10 @@ class Cart extends Front_Controller {
                     'uadd_county'      => $checkout_data['uadd_county']
                     ]);
 
+
+
             //$url = "http://localhost:3000/?".$query;
-            $url = "http://shivarora.co.uk/?"$query;
+            $url = "http://shivarora.co.uk/?".$query;
 
                 $ch = curl_init();
                 curl_setopt ($ch, CURLOPT_URL, $url);
@@ -488,7 +490,6 @@ class Cart extends Front_Controller {
             //json string to array
             $parsed_arr = json_decode($contents,true);
 
-        
             //json string to array
                      
                 if($parsed_arr['message'] == 'Success'){

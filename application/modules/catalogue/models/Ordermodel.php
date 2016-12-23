@@ -345,4 +345,46 @@ class OrderModel extends Commonmodel {
         return $output;
     }
 
+     public function fetchOrders2(){
+        
+        $param[ 'select' ]  =' id,customer_id, is_guest_order, 
+                                company_name, company_code, order_num, order_total, order_qty, 
+                                DATE_FORMAT( order_time,  "%d-%m-%Y") as order_date, status, is_stock_order, req_reference ';
+        
+        $param[ 'where' ][ 'company_name' ] =  'backend';
+        $param[ 'where' ][ 'status' ] =  'Not Processed';
+        $param[ 'where' ][ 'req_reference' ] =  '';
+        
+        $resuts = $this->get_all( $param );
+        return $resuts;
+    }
+
+    function getOrderDetails($id = false){
+        $this->db->select("ord.*,ua.*,up.*,osd.*",false);
+        //$this->db->select("ord.*,ua.*,up.*",false);
+        $this->db->where('ord.id',$id);
+        $this->db->from("order ord");
+         $this->db->join("user_accounts  ua","ua.uacc_id = ord.customer_id");
+         $this->db->join("user_profiles  up","up.upro_uacc_fk  = ua.uacc_id");
+         $this->db->join("order_ship_detail  osd","osd.order_id  = ord.id");
+        $query = $this->db->get();
+        return $query->row_array();
+    }
+    function getOrderItems($order_id)
+    {
+        $this->db->select("itms.*");
+        $this->db->where("order_id",$order_id);
+        $query_item = $this->db->get("order_item itms");
+        return $query_item->result_array();
+    }
+
+    public function update_order_email_status( $order_id ){
+        
+        $data = [];
+        $data[ 'data'   ][ 'req_reference' ] = 'email_sent';
+        $data[ 'where'  ][ 'id' ] = $order_id;
+        $this->update_record( $data );
+        //return $output;
+    }
+
 }

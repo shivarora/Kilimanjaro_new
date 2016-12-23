@@ -125,6 +125,8 @@ $(document).ready(function(){
             var data = table.row( $(this).parents("tr") ).data();
 
             var result = confirm("Are you sure you want to delete this user?");
+
+
             if(result){
                 $.ajax({
                     url: "/admin/user/user_delete/"+contentPanelId,
@@ -132,15 +134,21 @@ $(document).ready(function(){
                     success: function(response) {
                         //...
                         
-                        table
-                                .row( $(line).parents("tr") )
-                                .remove()
-                                .draw();
+                        // table
+                        //         .row( $(line).parents("tr") )
+                        //         .remove()
+                        //         .draw();
                     },
                     error: function () {
                         //your error code
+                        
                     }
                 });
+
+                 table
+                                .row( $(line).parents("tr") )
+                                .remove()
+                                .draw();
             }
         });
 

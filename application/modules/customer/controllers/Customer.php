@@ -151,7 +151,6 @@ class Customer extends Front_Controller {
         } else {
             $this->Customermodel->saveShipingAndBillingAddress();
             $this->session->set_userdata(array('CheckoutAddress' => $this->input->post()));
-
             redirect('catalogue/cart/process');
             //redirect('catalogue/cart/shippingSetUp');
             exit();

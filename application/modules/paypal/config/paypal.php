@@ -31,9 +31,15 @@ $config['APIVersion'] = '123.0';
  * Live: https://www.paypal.com/us/cgi-bin/webscr?cmd=_login-api-run
  *
  */
-$config['APIUsername'] = $config['Sandbox'] ? 'shibi.arora_api1.gmail.com' : MCC_PAYPAL_API_USERNAME;
-$config['APIPassword'] = $config['Sandbox'] ? '72TFP55BLMJTFZCL' : MCC_PAYPAL_API_PASSWORD;
-$config['APISignature'] = $config['Sandbox'] ? 'AFcWxV21C7fd0v3bYYYRCpSSRl31Atf02ZuSwtecV3jm9DgWBbenjkZ1' : MCC_PAYPAL_API_SIGNATURE;
+// $config['APIUsername'] = $config['Sandbox'] ? 'shibi.arora_api1.gmail.com' : MCC_PAYPAL_API_USERNAME;
+// $config['APIPassword'] = $config['Sandbox'] ? '72TFP55BLMJTFZCL' : MCC_PAYPAL_API_PASSWORD;
+// $config['APISignature'] = $config['Sandbox'] ? 'AFcWxV21C7fd0v3bYYYRCpSSRl31Atf02ZuSwtecV3jm9DgWBbenjkZ1' : MCC_PAYPAL_API_SIGNATURE;
+
+$config['APIUsername'] = $config['Sandbox'] ? 'shibi.arora_api1.gmail.com' : 
+'kimmit_api1.kilimanjarocoffeecupcompany.com';
+$config['APIPassword'] = $config['Sandbox'] ? '72TFP55BLMJTFZCL' : '8QQBQKRYK2DMCMJ6';
+$config['APISignature'] = $config['Sandbox'] ? 'AFcWxV21C7fd0v3bYYYRCpSSRl31Atf02ZuSwtecV3jm9DgWBbenjkZ1' : 
+'AhbCJEjaXQ3tbaTKu5C5fM2TpDxhAr7QFtHk4kx7iwOktNe2EzVXYvCu';
 
 /*
  * Payflow Gateway API Credentials
@@ -63,7 +69,8 @@ $config['PayFlowPartner'] = $config['Sandbox'] ? 'SANDBOX_PARTNER_GOES_HERE' : '
  * Your sandbox values go on the left and your live values go on the right.
  * The sandbox value included here is a global value provided for developrs to use in the PayPal sandbox.
  */
-$config['ApplicationID'] = $config['Sandbox'] ? 'APP-80W284485P519543T' : 'PRODUCTION_APP_ID_GOES_HERE';
+$config['ApplicationID'] = $config['Sandbox'] ? 'APP-80W284485P519543T' : 
+'AeZ-yzsOgVqQLqmqj1XBgQh4-NJnj-Ea7H8uWicKZj302jNc3_aX83MU5ou9SMTVPU7MOW9EtvbH3fie';
 
 /*
  * PayPal Developer Account Email Address

@@ -186,49 +186,53 @@ class CommonuserModel extends Commonmodel {
 					];
 		$this->flexi_auth->sql_select($sql_select);
 
-			$scout_array[]= $this->flexi_auth->get_user_id();
+			$scout_array[]=   $this->flexi_auth->get_user_id();
+			
+
 	        foreach ($scout_users as $key => $value) {
+	        
+
 	    		//creating scout array , so we will get user under these scouts only
 				$scout_array[] = $value['uacc_id'];    
 
 				$sql_where['upro_approval_acc'] = $value['uacc_id'];			
+				//$sql_where['upro_approval_acc'] = 604;			
 				$this->flexi_auth->sql_where( $sql_where );
 				$search_query = FALSE;		
 			
 				$users[] = $this->flexi_auth->search_users_array($search_query, FALSE, FALSE, FALSE, TRUE);
 	     	}
 
+
+
+     			//$this->data['users'] = $all_users;
+
+     			// echo "<pre>";
+     			// print_r($users);
+     			// exit();
+
 	     	$last_key = key( array_slice( $users[0], -1, 1, TRUE ));
 
-	     	foreach ($scout_users as $key => $value) {
-	     		# code...
-	     		$scout_users[$last_key + 1] = $value;
-	     		$last_key = $last_key + 1;
-	     		unset($scout_users[$key]);
-	     	}
+	     		
 
-			 	$all_users = $users[0] + $scout_users;
-     				
-     			
-     			$total_users = count($all_users);
+	     	if(isset($last_key)){
+		     	foreach ($scout_users as $key => $value) {
+		     		# code...
+		     		$scout_users[$last_key + 1] = $value;
+		     		$last_key = $last_key + 1;
+		     		unset($scout_users[$key]);
+		     	}
+		     }
 
-     			$this->data['users'] = $all_users;
+	     		$all_users = [];
+	     		if(isset($users[0])){
+			 		$all_users = $users[0] + $scout_users;
+			 	}else{
+     				$all_users = $scout_users;
+     		
+			 	}
 
-
-
-     				 
-     			if(isset($form_data['userName']) && $form_data['userName'] != "" ){
-
-			 		 foreach ($this->data['users'] as $key => $value) {
-			 		 	# code...
-			 		 	if(strtolower($value['uacc_username']) == $form_data['userName']){
-
-			 		 	}else{
-			 		 		unset($this->data['users'][$key]);
-			 		 	}
-			 		 }
-
-		 		}
+			 	$this->data['users'] = $all_users;
 	     		
 	 	}
 

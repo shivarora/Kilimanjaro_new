@@ -194,16 +194,18 @@ class CsvUtilitymodel extends Commonmodel {
         com_array_to_csv($this->csv_data_report, "product_upload_report.csv");
     }
     
-    function userUpload( $csvfile ){		
+    function userUpload( $csvfile ){
+    $logged_user = $this->flexi_auth->get_user_custom_data();
+
         $iterator = 1;  
         
         foreach ($csvfile as $key => $users) {	
 
 		$final_user = [];        		 					 	 				
 
-		 $final_user[] =explode(",", $users['first_name,last_name,username,mobile,email,password,activation_type,creater_id,address,company']);
+		 $final_user[] =explode(",", $users['first_name,last_name,username,mobile,email,password,activation_type,creater_id,address,address_2,city,county,postcode']);
 		
-
+		
 		 $user['upro_first_name'] 	= $final_user[0][0];
 		 $user['upro_last_name'] 	= $final_user[0][1];
 		 $user['uacc_username'] 	= $final_user[0][2];
@@ -212,10 +214,13 @@ class CsvUtilitymodel extends Commonmodel {
 		 $user['uacc_password'] 	= $final_user[0][5];
 		 $user['activation_type'] 	= $final_user[0][6];
 		 $user['upro_creater_id'] 	= $final_user[0][7];
-		 $user['uadd_recipient'] 	= $final_user[0][8];
-		 $user['upro_company']      = $final_user[0][9];
-
-
+		 $user['uadd_address_01'] 	= $final_user[0][8];
+		 $user['uadd_address_02'] 	= $final_user[0][9];
+		 $user['uadd_city'] 		= $final_user[0][10];
+		 $user['uadd_county'] 		= $final_user[0][11];
+		 $user['uadd_postcode'] 	= $final_user[0][12];
+		 $user[ 'uadd_company' ]    = $logged_user['uadd_company'];
+		 
 			$return_bool = false;				
 			$instant_active = FALSE;
 			$user_profile_pic = "";
@@ -244,18 +249,18 @@ class CsvUtilitymodel extends Commonmodel {
 									'upro_pass'	=> $this->encrypt->encode($password).'-'.$password,
 									'upro_first_name' => ucfirst( strtolower( $user['upro_first_name'] ) ),
 									'upro_last_name' => ucfirst( strtolower($user['upro_last_name'] ) ),
-									'upro_phone' => "",
+									'upro_phone' => $user['upro_phone'],
 									'upro_newsletter' => 0,
 									'upro_creater_id' => $this->flexi_auth->get_user_id(),
-									'uadd_recipient' => ucfirst( $user['uadd_recipient'] ),
+									'uadd_recipient' => ucfirst( $user['upro_first_name'] ),
 									'uadd_phone' => "",
-									'upro_company' => $user['upro_company'],
-									'uadd_address_01' => "",
-									'uadd_address_02' => "",
-									'uadd_city' => "",
-									'uadd_county' => "",
-									'uadd_post_code' => "",
-									'uadd_country' => "",
+									'upro_company' => $user['uadd_company'],
+									'uadd_address_01' => $user['uadd_address_01'],
+									'uadd_address_02' => $user['uadd_address_02'],
+									'uadd_city' => $user['uadd_city'],
+									'uadd_county' => $user['uadd_county'],
+									'uadd_post_code' => $user['uadd_post_code'],
+									'uadd_country' => "US",
 									'upro_department' => $dept,
 							];
 						$user_group = $user[ 'source_grp' ];					
@@ -272,8 +277,8 @@ class CsvUtilitymodel extends Commonmodel {
 						}else 
 						*/
 						if ($user_group == CMP_ADMIN ){
-							$user_group_id = 1;
-							$company_code = $user[ 'company_code' ];
+							//$user_group_id = ;
+							$company_code = $user[ 'uadd_company' ];
 							$profile_data['uadd_company'] = $company_code;
 							$profile_data['upro_company'] = $company_code;
 						}

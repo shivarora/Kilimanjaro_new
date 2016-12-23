@@ -1,0 +1,117 @@
+Searching 979 files for "Council"
+
+/Users/aroras/Documents/workspace/kilimanjaro/application/admin/controllers/Dashboard-b.php:
+   71  
+   72  
+   73:             $this->data['user_approval_title'] = $this->data['user_profile']->ugrp_name == USER ? 'Register User' : 'Council';
+   74              $opt = [];
+   75              $opt['result'] = 'row';
+
+/Users/aroras/Documents/workspace/kilimanjaro/application/admin/controllers/Dashboard.php:
+   71  
+   72  
+   73:             $this->data['user_approval_title'] = $this->data['user_profile']->ugrp_name == USER ? 'Register User' : 'Council';
+   74              $opt = [];
+   75              $opt['result'] = 'row';
+
+/Users/aroras/Documents/workspace/kilimanjaro/application/admin/libraries/Flexi_auth_lite.php:
+  395  	 * @author Ricky Hussey
+  396  	 */
+  397: 	public function get_user_custom_data_council()
+  398  	{		
+  399  	    return $this->CI->auth->session_data[$this->CI->auth->session_name['custom_user_data']];
+
+/Users/aroras/Documents/workspace/kilimanjaro/application/admin/libraries/Globaldata.php:
+   80  //        define('CMP_MD', 'Director');
+   81  //        define('CMP_PM', 'Purchase Manager');
+   82:         define('CMP_MD', 'Council');
+   83          define('CMP_PM', 'Scout');
+   84  
+
+/Users/aroras/Documents/workspace/kilimanjaro/application/admin/models/Commonusermodel.php:
+  175  
+  176  		$scout_array = [];
+  177: 		if($this->user_type == 'Council'){
+  178  			$scout_array[]= $company_code['uacc_id'];
+  179              foreach ($this->data['users'] as $key => $value) {
+  ...
+  181                  if($value['ugrp_name'] == 'Company'){
+  182                      unset($this->data['users'][$key]);
+  183:                 }elseif($value['ugrp_name'] == 'Council'){
+  184                      unset($this->data['users'][$key]);
+  185                  }elseif ($value['ugrp_name'] == 'Scout') {
+  ...
+  214                  if($value['ugrp_name'] == 'Company'){
+  215                      unset($this->data['users'][$key]);
+  216:                 }elseif($value['ugrp_name'] == 'Council'){
+  217                      unset($this->data['users'][$key]);
+  218                  }elseif($value['ugrp_name'] == 'Scout'){
+
+/Users/aroras/Documents/workspace/kilimanjaro/application/admin/modules/company/models/Companymodel.php:
+ 1078          return $output;
+ 1079      }
+ 1080:     function getCompanyCouncilProfile($company) {
+ 1081          $result = $this->db
+ 1082:                 ->select('t1.upro_uacc_fk as council_id')
+ 1083                  ->from('user_profiles t1')
+ 1084                  ->join('user_accounts t2', 't1.upro_uacc_fk=t2.uacc_id', 'left')
+ ....
+ 1091      function getCompanyUserProfile($company) {
+ 1092          $result = array();
+ 1093:         $council = $this->getCompanyCouncilProfile($company);
+ 1094:         if (sizeof($council)) {
+ 1095:             $push = array('user_id' => $council['council_id']);
+ 1096              $shift = array('user_id' => $company['account_id']);
+ 1097              $result = $this->db
+ 1098                      ->select('upro_uacc_fk as user_id')
+ 1099:                     ->where('upro_approval_acc', $council['council_id'])
+ 1100                      ->get('user_profiles')
+ 1101                      ->result_array();
+
+/Users/aroras/Documents/workspace/kilimanjaro/application/admin/modules/order/controllers/Order.php:
+   59              //$this->data['orders'] = $this->Ordermodel->downloadOrders();
+   60          }   
+   61:         elseif($user_type == 'Council') {
+   62              $this->data['orders'] = $this->Ordermodel->fetchOrders($fetchParam);        
+   63              $this->data['orders1'] = $this->Ordermodel->fetchOrders11($fetchParam1);        
+   ..
+   73              $this->data['group_users'] = com_makelist($group_users, 'uacc_id', 'uacc_username', true, 'Select User');
+   74          } else if ($user_type == CMP_MD) {
+   75:             $council_users = $this->db->select('t1.upro_uacc_fk id')->from('user_profiles t1')->join('user_accounts t2','t2.uacc_id=t1.upro_approval_acc')->where('upro_approval_acc', $this->flexi_auth->get_user_id())->get()->result();
+   76              $this->data['group_users'] = [ $this->flexi_auth->get_user_custom_data('uacc_id') => ucfirst($this->flexi_auth->get_user_custom_data('uacc_username'))];
+   77          } else if ($user_type == CMP_PM) {
+
+/Users/aroras/Documents/workspace/kilimanjaro/application/admin/modules/order/models/Ordermodel.php:
+  591          $company_code = $this->flexi_auth->get_user_custom_data();
+  592          $scout_array = [];
+  593:         if($this->user_type == 'Council') {
+  594                  $sql_select = [
+  595                                  $this->flexi_auth->db_column('user_acc', 'id'),
+
+/Users/aroras/Documents/workspace/kilimanjaro/application/admin/modules/user/controllers/ajax/User.php:
+   67  				$req_user_groups = 7;
+   68  			} else if( $user_profile == 7 ) {
+   69: 				$title = 'Council';
+   70  				$req_user_groups = 6;				
+   71  			}
+
+/Users/aroras/Documents/workspace/kilimanjaro/application/admin/modules/user/controllers/User.php:
+   44          $this->session->flashdata('message') : $this->data['INFO'];
+   45  
+   46:         //As i can see all the conuncil and  users as well under me.. i want to se eonly users and scout under council. so i am unsetting those rows her. Need to sort it out properly btw.
+   47                       
+   48  //        $this->data['table_labels']['Action'] = 'Delete User';
+   ..
+  738                  if($value['ugrp_name'] == 'Company'){
+  739                      unset($this->data['users'][$key]);
+  740:                 }elseif($value['ugrp_name'] == 'Council'){
+  741                      unset($this->data['users'][$key]);
+  742                  }elseif($value['ugrp_name'] == 'Super Admin'){
+  ...
+  804                  if($value['ugrp_name'] == 'Company'){
+  805                      unset($this->data['users'][$key]);
+  806:                 }elseif($value['ugrp_name'] == 'Council'){
+  807                      unset($this->data['users'][$key]);
+  808                  }elseif($value['ugrp_name'] == 'Super Admin'){
+
+23 matches across 10 files

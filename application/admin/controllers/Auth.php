@@ -34,9 +34,11 @@ class Auth extends CI_Controller {
 		// Load 'standard' flexi auth library by default.
 		$this->load->library('flexi_auth');	
 		
+	
      	// Redirect users logged in via password (However, not 'Remember me' users, as they may wish to login properly).
 		if ($this->flexi_auth->is_logged_in_via_password() && uri_string() != 'auth/logout') 
 		{
+
 			// Preserve any flashdata messages so they are passed to the redirect page.
 			if ($this->session->flashdata('message')) { $this->session->keep_flashdata('message'); }
 			

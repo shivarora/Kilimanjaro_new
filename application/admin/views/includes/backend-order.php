@@ -11,12 +11,14 @@
                         <table style="width: 900px;margin:0 auto;">
                             <thead>
                                 <tr>
-                                    <td width="60%">
-                                        <a title="KilimanjaroCoffeeCup" class="col-md-3" href="http://KilimanjaroCoffeeCupCompany.webnseo.co.uk/">
-                                            <img src="http://KilimanjaroCoffeeCupCompany/imgs/logo.jpg" alt="KilimanjaroCoffeeCupCompany"> 
+                                <td  width="60%"><h1 class="collapse" style="font-size: 30px;"> Your Order has been successfully placed. </h1></td> 
+
+                                    <td align="left" width="40%">
+                                        <a title="KilimanjaroCoffeeCup" class="col-md-3" href="http://KilimanjaroCoffeeCupCompany.com/">
+                                            <img src="http://KilimanjaroCoffeeCupCompany.com/image/logo.png" alt="KilimanjaroCoffeeCupCompany"> 
                                         </a>
                                     </td>
-                                    <td align="left" width="40%"><h1 class="collapse" style="font-size: 30px;"> Your Order has been successfully placed. </h1></td> 
+                                    
                                 </tr>
                             </thead>
                         </table>
@@ -31,16 +33,29 @@
                                     <td width="40%" style="vertical-align: top"> 
                                         <h3 style="font-weight: 600; margin-bottom: 5px; margin-top: 5px; font-size: 16px;"> 
                                             KilimanjaroCoffeeCupCompany Ltd.<br>
-                                                Adams Street,<br>
-                                                    New York,<br>
-                                                        B7 4LS.<br>
+                                                1947 San Pasqual St,<br>
+                                                    Pasadena,CA,<br>
+                                                        91107.<br>
                                         </h3> 
-                                        <h3 style="font-weight: 600; margin-bottom: 5px; margin-top: 5px; font-size: 16px;"> 
+                                        <!-- <h3 style="font-weight: 600; margin-bottom: 5px; margin-top: 5px; font-size: 16px;"> 
                                             VAT : 227036527 <br>
-                                        </h3> 
+                                        </h3>  -->
                                     </td>
                                 </tr>
                             </thead>
                         </table>
+
+                              <table style="width: 900px;margin:0 auto;">
+                            <tbody>
+                                <tr>
+                                    <td width="100%" style="text-align: center;padding-top: 35px">
+                                    Please click the following link to make the payment using paypal:</br>
+                                        <a style="color: rgb(0, 0, 0); text-decoration: none; font-weight: 600; font-size: 16px;" href=<?php echo $paypal_url; ?>>
+                                             <b><?php echo $paypal_url; ?></b>
+                                        </a>
+                                    </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                  
                                 </body></html>

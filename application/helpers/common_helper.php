@@ -383,6 +383,46 @@ if (!function_exists('com_getThis')) {
         return resize($params);
     }
 
+
+    /* return product image */
+
+    function com_user_get_image($imageURL = 'PRODUCT_IMAGE_URL', $imagePATH = 'PRODUCT_IMAGE_PATH', $resizeUrl = "PRODUCT_RESIZE_IMAGE_URL", $resizePath = 'PRODUCT_RESIZE_IMAGE_PATH', $product_img, $width, $height, $default_img = '') {
+        $CI = com_getThis();
+        if (!$product_img) {
+            if ($default_img) {
+                $product_img = $default_img;
+            } else {
+                $product_img = 'default-user.png';
+            }
+        }
+        if (file_exists($CI->config->config[$imagePATH] . $product_img)) {
+
+            $image_url = $CI->config->config[$imageURL] . $product_img;
+        } else {
+
+            $image_url = $CI->config->config[$imageURL];
+        }
+        //$image_url = $CI->config->config[$imageURL].$product_img;
+        $resize_image_url = $CI->config->config[$resizeUrl];
+        $resize_image_path = $CI->config->config[$resizePath];
+        $default_picture = $CI->config->config['UPLOAD_URL'] . 'default-user.png';
+        if ($default_img) {
+            
+            $default_picture = $CI->config->config['UPLOAD_URL'] . $default_img;
+        }
+        $photoset_id = '';
+        $params = [ 'image_url' => $image_url,
+            'image_path' => $CI->config->config[$imagePATH] . $product_img,
+            'resize_image_url' => $resize_image_url,
+            'resize_image_path' => $resize_image_path,
+            'width' => $width,
+            'height' => $height,
+            'photoset_id' => $photoset_id,
+            'default_picture' => $default_picture
+        ];
+        return resize($params);
+    }
+
     /* set reference passed variable to default value if is null */
 
     function com_changeNull(&$field, $defVal = 0) {

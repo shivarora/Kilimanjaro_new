@@ -17,7 +17,7 @@
                                                 <br>     
                                                 <br>
                                                 <h2 style="margin: 0px; padding-left: 10px; font-size: 21px"> KilimanjaroCoffeeCupCompany </h2>
-                                                <p style="margin: 0px; padding-left: 10px; font-size: 12px;"> Adams St,<br> New York B7 4LS,<br> US
+                                                <p style="margin: 0px; padding-left: 10px; font-size: 12px;"> 1947 San Pasqual St,<br> Pasadena,CA 91107,<br> US
                                                 </p>
 
                                             </td>
@@ -67,7 +67,7 @@
                                                                 <div style="border: 1px solid rgb(170, 170, 170); width: 350px; float: right;">
                                                                     <h6 style="border-bottom: 1px solid rgb(170, 170, 170); font-family: Verdana,Arial; font-weight: 700; margin-bottom: 0px; margin-top: 5px; text-transform: uppercase; padding: 5px 10px; font-size: 12px;">Ship
                                                                         to:</h6>
-                                                                    <p style="font-family: Verdana,Arial; font-weight: normal; font-size: 12px; line-height: 20px; margin-bottom: 15px; margin-top: 2px; padding: 5px 10px;"><span>Joan
+                                                                    <p style="font-family: Verdana,Arial; font-weight: normal; font-size: 12px; line-height: 20px; margin-bottom: 15px; margin-top: 2px; padding: 5px 10px;"><span>
                                                                             <?= $shipBill['first_name'] . ' ' . $shipBill['last_name'] ?><br>
                                                                             <?= $shipBill['billing_address1'] ?><br>
                                                                             <?php if ($shipBill['billing_company']) { ?>
@@ -187,7 +187,7 @@
                     </tbody>
                 </table>
                 <h5 style="font-family:Verdana,Arial;font-weight:normal;text-align:center;font-size:22px;line-height:32px;margin-bottom:75px;margin-top:30px">Thank
-                    you, Kilimanjaro!</h5>
+                    you, KilimanjaroCoffeeCupCompany!</h5>
             </td>
         </tr>
     </tbody>

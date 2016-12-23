@@ -4,6 +4,7 @@ class Auth_admin extends CI_Controller {
  
     function __construct() 
     {
+    	
         parent::__construct();
  		
 		// To load the CI benchmark and memory usage profiler - set 1==1.

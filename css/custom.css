@@ -271,3 +271,24 @@ h2.title:before{
     font-family: sans-serif;
     background: white;
 }
+
+@media (min-width:200px) and (max-width:603px){
+    .carousel-caption {
+    top:0;
+    width:auto;
+    right:auto;
+    bottom:0px;
+    left:8%;
+    padding:20px;
+    background:rgba(0,0,0,0.70);
+    text-align:left;
+    height:auto;
+    max-width:75%;
+    }
+
+    .carousel-caption > p {
+   /*font-family: cursive;*/
+    font-size: 10px;
+    line-height: 20px;
+    }
+}

@@ -1,5 +1,5 @@
 <?php 
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+//if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Payments_pro extends Admin_Controller 
 {
@@ -270,7 +270,7 @@ class Payments_pro extends Admin_Controller
 
 
                          //get shipping price
-                     $url = "http://shivarora.co.uk/";
+                     $url = "http://shivarora.co.uk/".$query;
                         $ch = curl_init();
                         curl_setopt ($ch, CURLOPT_URL, $url);
                         curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, 20);
@@ -310,7 +310,7 @@ class Payments_pro extends Admin_Controller
                     //TODO : Add shipping charges here
 
 
-                 	$this_script = 'http://kilimanjaro.com/paypal/Payments_pro/';
+                 	$this_script = 'http://kilimanjaroCoffeeCupCompany.com/paypal/Payments_pro/';
 
                     $purchase_contents = $orderItems;
              
@@ -477,7 +477,7 @@ class Payments_pro extends Admin_Controller
                     $email_config = [
                         'to' => $orderDetails['uacc_email'],
                         'subject' => 'Order Placed email',
-                        'from' => 'kilimanjaroCoffeeCupCompany@admin.com',
+                        'from' => 'kilimanjarocoffeecupcompany@gmail.com',
                         'body' => $emailContent
                     ];
 

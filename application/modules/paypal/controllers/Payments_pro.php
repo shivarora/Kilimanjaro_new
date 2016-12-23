@@ -489,35 +489,32 @@ class Payments_pro extends Front_Controller
             $ord_num = $response['REQUESTDATA']['PAYMENTREQUEST_0_CUSTOM'];
          }
 
+        
         $orderDetail = $this->Ordermodel->getGuestOrderDetail($ord_num);
-
+        
         $shipping_details = $this->Ordermodel->getShippingBillingDetails($ord_num);
+
+        $orderItems = $this->Ordermodel->listOrderItems($orderDetail['id']);
 
         $details = array();
         $details['order_details'] = $orderDetail;
+        $details['order_items'] = $orderItems;
+        $details['order_shipping'] = $shipping_details;
          
-        $emailContent = $this->load->view('includes/email/backend-order',$details,true);
+        $emailContent = $this->load->view('includes/email/backend_order_email',$details,true);
      
         $this->load->library('SEmail');
         $email_config = [
             'to' => $shipping_details['order_email'],
             'subject' => 'Order Success email',
-            'from' => 'kilimanjaroCoffeeCupCompany@admin.com',
+            'from' => 'kilimanjaroCoffeeCupCompany@gmail.com',
             'body' => $emailContent
         ];
 
-       // $status =  $this->semail->send_mail( $email_config );
+
+        $status =  $this->semail->send_mail( $email_config );
+
         
-
-        //send email to Jrohdes
-        $email_config = [
-            'to' => 'jrhodes@kmjcoffee.com',
-            'subject' => 'Order Success email',
-            'from' => 'kilimanjaroCoffeeCupCompany@admin.com',
-            'body' => $emailContent
-        ];
-
-       // $status =  $this->semail->send_mail( $email_config );
 
         $this->session->unset_userdata('checkoutRole');
         $this->session->unset_userdata('user_register');

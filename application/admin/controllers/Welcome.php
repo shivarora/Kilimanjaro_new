@@ -6,6 +6,7 @@ if (!defined('BASEPATH'))
 class Welcome extends CMS_Controller {
     
     function __construct() {
+        
         parent::__construct();
         $this->load->model('Common_auth_model');
         $this->load->model('Commonusermodel');
@@ -13,9 +14,13 @@ class Welcome extends CMS_Controller {
     }
 
     function index() {
+
+        
         if($this->isLogged){
+            
             redirect('dashboard');
         }
+
         if ($this->input->post('login_user')){
             if(!$this->Common_auth_model->login()){
                 // Get any status message that may have been set.
@@ -28,6 +33,8 @@ class Welcome extends CMS_Controller {
             $this->data['INFO'] = (! isset($this->data['INFO'])) ? 
                                         $this->session->flashdata('message') : $this->data['INFO'];
         }
+
+        
         $this->load->view(THEME . 'login', $this->data);    
     }
 

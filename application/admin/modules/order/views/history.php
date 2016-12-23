@@ -83,7 +83,7 @@
            </div>
 
            <div class="col-md-3">
-               <a href="order/download"><h3 style="cursor: pointer; font-size: 15px;" class="btn btn-primary"><i class="fa fa-download" title="Add New user"></i> Download Orders Details</h3></a>
+               <a href="order/download"><h3 style="cursor: pointer; font-size: 15px;margin-left: 44px;margin-bottom: 5px;" class="btn btn-primary"><i class="fa fa-download" title="Add New user"></i> Download Orders Details</h3></a>
            </div>
         </div>
     </div>

@@ -18,7 +18,7 @@
                         </div>
                         <div class="form-group required-field-block">
                             <input type="file"  name="image" class="form-control" >
-                            <img src="<?php echo com_get_image('UPLOAD_USERS_IMG_URL', 'UPLOAD_USERS_IMG_PATH', 'UPLOAD_USERS_RESIZE_IMG_URL', 'UPLOAD_USERS_RESIZE_IMG_PATH', $userDetails['upro_image'], 50, 37) ?>" > 
+                            <img src="<?php echo com_user_get_image('UPLOAD_USERS_IMG_URL', 'UPLOAD_USERS_IMG_PATH', 'UPLOAD_USERS_RESIZE_IMG_URL', 'UPLOAD_USERS_RESIZE_IMG_PATH', $userDetails['upro_image'], 50, 37) ?>" > 
                         </div>                        
                         <div class="form-group required-field-block">
                             <input type="password" placeholder="Password *" name="uacc_password" class="form-control" value="" >
